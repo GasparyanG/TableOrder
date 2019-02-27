@@ -1,0 +1,7 @@
+search:
+  behavior: 'seems you know how to change html'
+  timeAndDate: 'Set time and date reservation properly'
+  reservingPast: 'We apologize, but time machine is unreal'
+
+reservation:
+  tableId: 'tableId is missing'

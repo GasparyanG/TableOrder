@@ -1,0 +1,12 @@
+search:
+  personAmount:       'personAmount'
+  location:           'location'
+  reservationTime:    'reservationTime'
+  reservationDate:    'reservationDate'
+  # this MAY not be used at all
+  restaurantName:     'restaurnatName'
+  # search abstract factory required {key : value} pair
+  behavior:
+    global: global
+    restaurantGroup: restaurantGroup
+    restaurant: restaurant

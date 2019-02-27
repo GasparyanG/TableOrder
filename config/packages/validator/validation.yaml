@@ -1,0 +1,25 @@
+App\Service\Search\Products\ObjectsForValidation\GlobalSearchObject:
+  properties:
+    personAmount:
+      - NotBlank: ~
+      # soon will be defined
+    location:
+      - NotBlank: ~
+      # soon will be defined
+    reservationDate:
+      - NotBlank: ~
+      # soon will be defined
+    reservationTime:
+      - NotBlank: ~
+      # soon will be defined
+
+App\Entity\Reservation:
+  properties:
+    reservationTime:
+      - NotBlank: ~
+    reservationDate:
+      - NotBlank: ~
+    amountOfTime:
+      - NotBlank: ~
+      - Type: integer
+        

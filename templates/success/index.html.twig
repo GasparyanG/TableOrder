@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SuccessController!{% endblock %}
+
+{% block body %}
+    <div>
+        {{user.getFirstName}} Cookie Id : {{ cookieId }}
+    </div>
+    <div>
+        User's Last Name : {{ user.getLastName }}
+    </div>
+{% endblock %}

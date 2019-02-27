@@ -1,0 +1,33 @@
+{#
+    - [] make search imp dynamic (1) (value="global" this need to be dynamic)
+#}
+
+<div class="container mt-4">
+    <form action="/search" method="GET">
+        <div class="form-group">
+            <div class="input-group input-group-lg">
+                {# 1 #}
+                <input type="hidden" name="behavior" value="global">
+                <input name="reservationTime" type="time" class="form-control">
+                <input name="reservationDate" type="date" class="form-control">
+                <select name="personAmount" id="" class="form-control">
+                    {% for personAmount in arrayOfPersonAmounts %}
+                        <option value={{personAmount}}>{{personAmount}}</option>
+                    {% endfor %}
+                </select>
+                <select name="location" id="location" class="form-control">
+                    {% for cityName, city in cities %}
+                        <optgroup label = {{cityName}}>
+                            {% for region in city %}
+                                <option value={{region}}>{{region}}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-success">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

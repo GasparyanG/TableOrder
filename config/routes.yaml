@@ -1,0 +1,39 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+login:
+  path: /login
+  controller: App\Controller\SecurityController::login
+user_page:
+  path: /users/{user_id}
+  controller: App\Controller\UserController::getUser
+success:
+  path: /success
+  controller: App\Controller\SuccessController::showSuccessMessage
+
+admin_page:
+  path: /admin
+  controller: App\Controller\AdminController::getPage
+
+search:
+  path: /search
+  controller: App\Controller\SearchController::getResult
+
+#reservation:
+#  path: /reservation
+#  controller: App\Controller\ReservationController::reserve
+
+home_page:
+  path: /home
+  controller: App\Controller\HomeController::getPage
+
+reservation:
+  path: /restaurants/{restaurantName}/{restaurantId}/reservation
+  controller: App\Controller\ReservationController::getPage
+  methods: [GET]
+
+make_reservation:
+  path: /restaurants/{restaurantName}/{restaurantId}/reservation
+  controller: App\Controller\ReservationController::reserve
+  methods: [POST]
+  

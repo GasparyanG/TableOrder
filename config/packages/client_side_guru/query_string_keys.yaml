@@ -1,0 +1,13 @@
+search:
+  behavior: 'behavior'
+  location: 'location'
+  personAmount: 'personAmount'
+  reservationTime: 'reservationTime'
+  reservationDate: 'reservationDate'
+
+reservation:
+  tableId: 'tableId'
+  amountOfTime: 'amountOfTime'
+
+postArray:
+  reviewValue: 'reviewValue'

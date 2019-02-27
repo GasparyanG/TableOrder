@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ReservationController!{% endblock %}
+
+{% block body %}
+    <div>
+        {% if accessGranted %}
+            Hello World
+        {% endif %}
+        <form action="" method="POST">
+            <input type="input" name = "amountOfTime">
+            <button type = "submit">Press</button>
+        </form>
+    </div>
+{% endblock %}

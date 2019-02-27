@@ -1,0 +1,34 @@
+{#
+    - [] use conditions to not ask authenticated user to sign up/log in (1)
+    - [] search button need to be shown if required (2) (given true need to be dynamic)
+#}
+<div>
+    <nav class="navbar navbar-light navbar-expand-lg bg-light">
+        <a href="#" class="navbar-brand">TableOrder</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav mr-auto">
+
+            </ul>
+            {# 1 #}
+            
+            <div class="my-2 my-lg-0">
+                <button class="btn btn-primary">
+                    Sign Up
+                </button>
+                <button class="btn btn-outline-secondary">
+                    Log In
+                </button>
+                {# 2 #}
+                {% if false %}
+                    <button class="btn btn-outline-success" data-toggle="collapse" data-target="#mainSearchFormGroup">
+                        <i class="fas fa-search fa-1.5x"></i>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+</div>
