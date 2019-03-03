@@ -2,6 +2,8 @@
 
 namespace App\Service\Reservation\Bridge;
 
+use App\Entity\Reservation;
+
 interface ReservationBridgeInterface
 {
     public function restaurantExists(string $restaurantName, int $restaurantId): bool;
@@ -17,4 +19,6 @@ interface ReservationBridgeInterface
     public function tableExists(int $tableId, int $restaurantId): bool;
 
     public function replace(array $queryParams): void;
+
+    public function prepareReservationWithoutAmountOfTime(): ?Reservation;
 }

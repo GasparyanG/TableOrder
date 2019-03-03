@@ -43,6 +43,11 @@ class Review
      */
     private $review;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $restaurantName;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +109,18 @@ class Review
     public function setReview(int $review): self
     {
         $this->review = $review;
+
+        return $this;
+    }
+
+    public function getRestaurantName(): ?string
+    {
+        return $this->restaurantName;
+    }
+
+    public function setRestaurantName(string $restaurantName): self
+    {
+        $this->restaurantName = $restaurantName;
 
         return $this;
     }

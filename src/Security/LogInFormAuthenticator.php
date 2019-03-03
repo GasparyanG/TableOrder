@@ -95,3 +95,4 @@ class LogInFormAuthenticator extends AbstractFormLoginAuthenticator
         return $this->urlGenerator->generate('app_login');
     }
 }
+

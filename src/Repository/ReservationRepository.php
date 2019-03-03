@@ -72,7 +72,7 @@ class ReservationRepository extends ServiceEntityRepository
 
         return $qb->where($qb->expr()->andX('r.table = :tableId',
             "r.reservationDate = :reservationDate", 
-            "r.reservationTime < :reservationTime"))
+            "r.reservationTime <= :reservationTime"))
             ->orderBy('r.reservationTime', 'DESC')
             ->setMaxResults(1)
             ->setParameter("reservationTime", $reservationTime)
@@ -88,7 +88,7 @@ class ReservationRepository extends ServiceEntityRepository
 
         return $qb->where($qb->expr()->andX('r.table = :tableId',
             "r.reservationDate = :reservationDate", 
-            "r.reservationTime > :reservationTime"))
+            "r.reservationTime >= :reservationTime"))
             ->orderBy('r.reservationTime', 'ASC')
             ->setMaxResults(1)
             ->setParameter("reservationTime", $reservationTime)

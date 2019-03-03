@@ -23,6 +23,8 @@ class AmountOfTimeChecker implements AmountOfTimeCheckerInterface
             return true;
         }
 
+        $nextReservation = $nextReservation[0];
+
         $diffInMinutes = $this->subtraction($reservation, $nextReservation);
         if ($diffInMinutes - $reservation->getAmountOfTime() >= 0) {
             return true;
@@ -49,7 +51,8 @@ class AmountOfTimeChecker implements AmountOfTimeCheckerInterface
 
     public function getValidAmountOfTime(Reservation $reservation): int
     {
-        $nextReservation = $this->reservationRepo->findNextReservation($reservation->getReservationTime(), $reservation->getReservationDate(), $reservation->getTable());
+        $nextReservation = $this->reservationRepo->findNextReservation($reservation->getReservationTime()->format("H:i:s"), $reservation->getReservationDate()->format("Y-m-d"), $reservation->getTable());
+        $nextReservation = $nextReservation[0];
         
         return $this->subtraction($reservation, $nextReservation);
     }

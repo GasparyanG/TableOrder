@@ -47,4 +47,15 @@ class ReviewRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getReview(string $restaurantName): array
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        return $qb->select("avg(r.review) as avg_review")
+            ->where('r.restaurantName = :restaurantName')
+            ->setParameter('restaurantName', $restaurantName)
+            ->getQuery()
+            ->getResult();
+    }
 }

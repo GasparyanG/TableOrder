@@ -14,7 +14,7 @@
             
         <div class="card col-6">
             {% set mainRestaurant = nestedArray[0].restaurant %}
-            <img src={{"photo/restaurant/cover-photo/" ~ mainRestaurant.coverPhoto}} class ="card-img-top" alt="">
+            <img src={{"photo/restaurant/cover-photo/" ~ mainRestaurant.coverPhoto}} class="card-img-top" alt="">
             <h1 class="card-title">
                 {{mainRestaurant.name}}
             </h1>
@@ -35,7 +35,7 @@
                                 </li>
                                 <li class="list-group-item active">
                                     <a class="btn btn-primary" href={{"/restaurants/" ~ table.restaurant.name ~ "/" ~ table.restaurant.id ~ "/reservation?personAmount=" ~ queryParams.personAmount ~ 
-                                    "&reservationDate" ~ queryParams.reservationDate ~ "&reservationTime=" ~ queryParams.reservationTime ~ "&tableId=" ~ table.id}}>Reserver</a>
+                                    "&reservationDate=" ~ queryParams.reservationDate ~ "&reservationTime=" ~ queryParams.reservationTime ~ "&tableId=" ~ table.id}}>Reserver</a>
                                 </li>
                             </ul>
                         </div>
