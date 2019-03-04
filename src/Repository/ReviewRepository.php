@@ -48,13 +48,74 @@ class ReviewRepository extends ServiceEntityRepository
     }
     */
 
-    public function getReview(string $restaurantName): array
+    /**
+     * @param $restaurantId
+     * @return array
+     */
+    public function getReview($restaurantId): array
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        return $qb->select("avg(r.review) as avg_review")
+            ->where('r.restaurant = :restaurantId')
+            ->setParameter('restaurantId', $restaurantId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function gerRestaurantGroupReview($restaurantName): array
     {
         $qb = $this->createQueryBuilder("r");
 
         return $qb->select("avg(r.review) as avg_review")
             ->where('r.restaurantName = :restaurantName')
             ->setParameter('restaurantName', $restaurantName)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAmountOfReview($restaurantId): array
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        return $qb->select('count(r.review) as amountOfReview')
+            ->where('r.restaurant = :restaurantId')
+            ->setParameter('restaurantId', $restaurantId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findRestaurantGroupAmountOfReview($restaurantName): array
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        return $qb->select('count(r.review) as amountOfReview')
+            ->where('r.restaurantName = :restaurantName')
+            ->setParameter('restaurantName', $restaurantName)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findRestaurantGroupSpecificAmountOfReview($restaurantName, $rating)
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        return $qb->select('count(r.review) as amountOfReview')
+            ->where($qb->expr()->andX('r.restaurantName = :restaurantName', 'r.review = :rating'))
+            ->setParameter('restaurantName', $restaurantName)
+            ->setParameter('rating', $rating)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findSpecificAmountOfReview($restaurantId, $rating)
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        return $qb->select('count(r.review) as amountOfReview')
+            ->where($qb->expr()->andX('r.restaurant = :restaurantId', 'r.review = :rating'))
+            ->setParameter('restaurantId', $restaurantId)
+            ->setParameter('rating', $rating)
             ->getQuery()
             ->getResult();
     }

@@ -36,4 +36,7 @@ make_reservation:
   path: /restaurants/{restaurantName}/{restaurantId}/reservation
   controller: App\Controller\ReservationController::reserve
   methods: [POST]
-  
+
+restaurant:
+  path: /restaurants/{restaurantName}/{restaurantId}
+  controller: App\Controller\RestaurantController::getPage

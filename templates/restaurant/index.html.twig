@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{#
+    - [] href (1)
+    - [] make photo directory dynamic (i.e. config it in yaml) (2)
+    - [] think about breadcrumb (3)
+#}
+
+{# restaurant.name #}
+{% block title %}{{ restaurant.name }}{% endblock %}
+
+{% block body %}
+    {# 3 #}
+    <ol class="breadcrumb">
+        {# 1 #}
+        <li class="breadcrumb-item"><a href="#">restaurants</a></li>
+        <li class="breadcrumb-item"><a href="#">{{ restaurant.name }}</a></li>
+        <li class="breadcrumb-item active">{{ restaurant.id }}</li>
+    </ol>
+    <div class="mb-3">
+
+        <img class="img-fluid" src={{ "/photo/restaurant/cover-photo/" ~ restaurant.coverPhoto }}>
+    </div>
+    <div class="row mb-5">
+        <div class="col-md-8">
+            {# restaurant.name #}
+            <h1 class="text-center">{{ restaurant.name }}</h1>
+            <hr>
+            <div class="text-center">
+                {# review #}
+                {% if review %}
+                    <span>Review: <span class="text-warning"><i class="far fa-star"></i></span>{{ review }}</span>
+                {% else %}
+                    <span>Review: <span class="text-warning"><i class="far fa-star"></i></span>No Review Yet</span>
+                {% endif %}
+                {# amuont of people #}
+                <span><i class="far fa-comment-alt"></i> {{ amountOfReview }}</span>
+            </div>
+            <hr>
+            {# about restaurant #}
+            <div class="p-2">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, quae similique? Aspernatur, commodi dolore doloremque, esse eum exercitationem fuga fugiat impedit molestias nesciunt perspiciatis quis quisquam sunt tempora voluptates, voluptatum.
+            </div>
+            <h4 class="text-center mt-4">{{ amountOfReview }} people ratings</h4>
+            <hr>
+            {# review of visitors with progress bars #}
+            <div class ="row">
+                <div class="col-md-6">
+                    <h5>Overall ratings and reviews</h5>
+                    Reviews can only be made by diners who have eaten at this restaurant
+                    <div class="mt-2">
+                        <span>Review: <span class="text-warning"><i class="far fa-star"></i></span> {{ review }}</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    {% for index, amount in detailedReview %}
+                        {% set ratings = [5,4,3,2,1] %}
+                        {# progress in percentage #}
+                        {% set progress = amount/amountOfReview * 100 %}
+                        <div class="row">
+                            <div class="font-weight-bold col-md-1">{{ ratings[index] }}</div>
+                            <div class="col-md-11">
+                                <div class="progress">
+                                    <div class="progress-bar" style={{ "width:" ~ progress ~ "%"}}></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Find a table</h4>
+                    <form action="" method="POST">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="time" class="form-control">
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="input-group mt-2">
+                                <select name="personAmount" id="" class="form-control">
+                                    {% for personAmount in arrayOfPersonAmounts %}
+                                        <option value={{personAmount}}>{{personAmount}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Find table</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
