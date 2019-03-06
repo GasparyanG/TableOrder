@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{# title need to be dynamic #}
+{% block title %}
+    {% if notReservedTables %}
+        {% set restaurant = notReservedTables[0].getRestaurant() %}
+        {% set restaurantName = restaurant.name %}
+        {{ restaurantName }}
+    {% else %}
+        Error
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% set restaurant = notReservedTables[0].getRestaurant() %}
+    {% set restaurantName = restaurant.name %}
+    {% set restaurantLocation = restaurant.location %}
+    {% if notReservedTables %}
+        <div class="alert alert-info text-center mt-4">
+            <span>Available tables in <strong><em>{{ restaurantName }}</em> </strong> located in <strong><em>{{ restaurantLocation}}</em></strong> </span>
+        </div>
+
+        <div class = "row">
+            {% for table in notReservedTables %}
+                <div class="card col-md-4 mb-1 mt-1">
+                    <h5 class="card-header text-center">
+                        Ready to be reserved
+                    </h5>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                           <li class="list-group-item"><i class="fas fa-male"></i> <span class="text-muted">Person Amount</span> {{ table.personAmount }}</li>
+                            <li class="list-group-item"><i class="fas fa-hashtag"></i> <span class="text-muted">TableNumber</span> {{ table.tableNumber }}</li>
+
+                            {# problem is about table id #}
+                            <a class="list-group-item list-group-item-action active" href={{"/restaurants/" ~ table.restaurant.name ~ "/" ~ table.restaurant.id ~ "/reservation?personAmount=" ~ queryParams.personAmount ~
+                            "&reservationDate=" ~ queryParams.reservationDate ~ "&tableId=" ~ table.id ~ "&reservationTime=" ~ queryParams.reservationTime}}>
+                            <i class="fas fa-book"></i> Reserve</a>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <div class="alert alert-danger text-center mt-4">
+            <strong>Something went wrong please try again</strong>
+        </div>
+    {% endif %}
+{% endblock %}

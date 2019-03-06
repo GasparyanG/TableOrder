@@ -4,13 +4,16 @@
     - [] href (1)
     - [] make photo directory dynamic (i.e. config it in yaml) (2)
     - [] think about breadcrumb (3)
+    - [] form input names need to be dynamically seted (i.e. config it in yaml) (4)
 #}
 
 {# restaurant.name #}
 {% block title %}{{ restaurant.name }}{% endblock %}
 
 {% block body %}
+    <div ng-controller="RestaurantCtrl">
     {# 3 #}
+
     <ol class="breadcrumb">
         {# 1 #}
         <li class="breadcrumb-item"><a href="#">restaurants</a></li>
@@ -69,28 +72,60 @@
                 </div>
             </div>
         </div>
+
+
         <div class="col-md-4">
+
+            {# no table found #}
+            <div class="alert alert-info hide" id="noTableLeft">
+                <span><strong>All tables are reserved in this restaurant!</strong> Please try again a little bit later</span>
+            </div>
+
+            {# error occurred while searhcing #}
+            <div class="alert alert-danger" id="errorWhileSearching">
+                <span><strong>Something went wrong!</strong> Please try again</span>
+            </div>
+
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title text-center">Find a table</h4>
-                    <form action="" method="POST">
+                    {#<form action="/test" method="GET">#}
                         <div class="form-group">
+
                             <div class="input-group">
-                                <input type="time" class="form-control">
-                                <input type="date" class="form-control">
+                                {# 4 #}
+                                <input ng-init={{ "restaurantName='" ~ restaurant.name ~ "'" }} ng-model="restaurantName" type="hidden" name="restaurantName" value={{ restaurant.name }}>
+                                <input ng-init={{ "behavior='restaurant'" }} type="hidden" name="behavior" value="restaurant" ng-model="behavior">
+                                <input ng-init={{ "restaurantId='" ~ restaurant.id ~ "'" }} type="hidden" name="restaurantId" value={{ restaurant.id }}, ng-model="restaurantId">
+                            </div>
+
+                            <div class="input-group">
+                                <input type="time" name="reservationTime" class="form-control" ng-model="reservationTime">
+                                <input type="date" name="reservationDate" class="form-control" ng-model="reservationDate">
                             </div>
                             <div class="input-group mt-2">
-                                <select name="personAmount" id="" class="form-control">
+                                <select name="personAmount" id="" class="form-control" ng-model="personAmount">
                                     {% for personAmount in arrayOfPersonAmounts %}
                                         <option value={{personAmount}}>{{personAmount}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                         </div>
-                        <button class="btn btn-primary">Find table</button>
-                    </form>
+                        <button class="btn btn-primary" ng-click="findATable()">Find table</button>
+                    {#</form>#}
                 </div>
             </div>
         </div>
     </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {# services #}
+    {# url maker #}
+    <script src="/js/angular/services/url-guru/url-maker.js"></script>
+    {# query string maker #}
+    <script src="/js/angular/restaurant/services/query-string-maker.js"></script>
+    {# restaurant controller #}
+    <script src="/js/angular/restaurant/controllers/restaurant-ctrl.js"></script>
 {% endblock %}

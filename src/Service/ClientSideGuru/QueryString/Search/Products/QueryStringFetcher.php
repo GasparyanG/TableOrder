@@ -12,6 +12,11 @@ class QueryStringFetcher extends ParentFetcher implements QueryStringFetcherInte
         return $this->queryParamConf["search"]["behavior"]["global"];
     }
 
+    public function getRestaurantBehavior(): string
+    {
+        return $this->queryParamConf["search"]["behavior"]["restaurant"];
+    }
+
     public function getBehaviorKey(): string
     {
         return $this->queryParamKeysConf['search']['behavior'];
@@ -24,6 +29,21 @@ class QueryStringFetcher extends ParentFetcher implements QueryStringFetcherInte
         if (isset($queryString[$keyForRestaurantName])) {
             return $queryString[$keyForRestaurantName];
         }
+
+        return null;
+    }
+
+    public function getRestaurantId(array $queryString): ?int
+    {
+        $keyForRestaurantId = $this->queryParamConf['search']['restaurantId'];
+
+        if (isset($queryString[$keyForRestaurantId])) {
+            if (is_int((int)$queryString[$keyForRestaurantId])) {
+                return $queryString[$keyForRestaurantId];
+            }
+        }
+
+        return null;
     }
 
     public function getLocation(array $queryString): ?string

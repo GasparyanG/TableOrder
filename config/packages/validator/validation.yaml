@@ -13,6 +13,19 @@ App\Service\Search\Products\ObjectsForValidation\GlobalSearchObject:
       - NotBlank: ~
       # soon will be defined
 
+App\Service\Search\Products\ObjectsForValidation\RestaurantScopeSearchObject:
+  properties:
+    personAmount:
+      - NotBlank: ~
+    reservationDate:
+      - NotBlank: ~
+    reservationTime:
+      - NotBlank: ~
+    restaurantName:
+      - NotBlank: ~
+    restaurantId:
+      - NotBlank: ~
+
 App\Entity\Reservation:
   properties:
     reservationTime:

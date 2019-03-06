@@ -93,4 +93,9 @@ class Searcher
 
         return $tablesIds;
     }
+
+    public function getRestaurant(int $restaurantId, string $restaurantName): array
+    {
+        return $this->restaurantRepo->findBy(["id" => $restaurantId, "name" => $restaurantName]);
+    }
 }

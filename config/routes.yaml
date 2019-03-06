@@ -40,3 +40,11 @@ make_reservation:
 restaurant:
   path: /restaurants/{restaurantName}/{restaurantId}
   controller: App\Controller\RestaurantController::getPage
+
+test_for_ajax_search:
+  path: /test
+  controller: App\Controller\TestController::ajaxSearch
+
+concrete_restaurant_reservation:
+  path: /search/concrete-restaurant
+  controller: App\Controller\ConcreteRestaurantReservationController::search

@@ -27,7 +27,8 @@ class Factory implements FactoryInterface
         $this->directoryNamespace = "App\Service\Search\AbstractFactory\Products\\";
         $this->productsNames = [
             // add products as they get ready
-            "GlobalSearchAbstractFactory"
+            "GlobalSearchAbstractFactory",
+            "RestaurantSearchAbstractFactory"
         ];
     }
 

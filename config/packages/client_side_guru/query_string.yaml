@@ -4,9 +4,10 @@ search:
   reservationTime:    'reservationTime'
   reservationDate:    'reservationDate'
   # this MAY not be used at all
-  restaurantName:     'restaurnatName'
+  restaurantName:     'restaurantName'
+  restaurantId:       'restaurantId'
   # search abstract factory required {key : value} pair
   behavior:
-    global: global
-    restaurantGroup: restaurantGroup
-    restaurant: restaurant
+    global: 'global'
+    restaurantGroup: 'restaurantGroup'
+    restaurant: 'restaurant'

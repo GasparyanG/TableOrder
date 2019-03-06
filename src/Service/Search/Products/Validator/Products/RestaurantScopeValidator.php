@@ -2,7 +2,7 @@
 
 /**
  * [x]- query string need to correspond to searcher
- *      all fiealds, which are required to run search MUST be either included initially or added manualy
+ *      all fields, which are required to run search MUST be either included initially or added manually
  * []- populated query params need to be validated
  */
 
@@ -11,26 +11,29 @@ namespace App\Service\Search\Products\Validator\Products;
 use App\Service\Search\Products\Validator\ValidatorInterface;
 use App\Service\Search\Products\Validator\Common\Validator;
 
-class GlobalValidator extends Validator implements ValidatorInterface
+class RestaurantScopeValidator extends Validator implements ValidatorInterface
 {
     /**
      * check to see whether all required params is included into passed array
      * - if no
      *      except date and time everything else will be sanitized
-     * - else 
+     * - else
      *      use given 'queryParams' array
      *
      * @return null|array 'null' will interupt further sanitization if date or time is not defined
      */
     public function sanitizeQueryParams(array $queryParams): ?array
     {
-        // yaml configuration fetching (defined by current app author) guarantee that 
+        // yaml configuration fetching (defined by current app author) guarantee that
         // if parameter is not defined the null will be returned
         if (!$this->fetcher->getReservationTime($queryParams) || !$this->fetcher->getReservationDate($queryParams)) {
             return null;
         }
 
-        $queryParams = $this->sanitizeLocation($queryParams);
+        elseif (!$this->fetcher->getRestaurantName($queryParams) || !$this->fetcher->getRestaurantId($queryParams)) {
+            return null;
+        }
+
         $queryParams = $this->sanitizePersonAmount($queryParams);
 
         return $queryParams;
@@ -40,13 +43,14 @@ class GlobalValidator extends Validator implements ValidatorInterface
     {
         /**
          * []- object need to be defined to validate query params with 'symfony/validator'
-         * 
-         *  note: after this method imp it just remains to define any controller 
+         *
+         *  note: after this method imp it just remains to define any controller
          *  dependent from these services!
          */
 
         $objectForValidation->setPersonAmount($queryParams[$this->keysFetcher->getPersonAmount()]);
-        $objectForValidation->setLocation($queryParams[$this->keysFetcher->getLocation()]);
+        $objectForValidation->setRestaurantName($queryParams[$this->keysFetcher->getRestaurantName()]);
+        $objectForValidation->setRestaurantId($queryParams[$this->keysFetcher->getRestaurantId()]);
         $objectForValidation->setReservationDate($queryParams[$this->keysFetcher->getReservationDate()]);
         $objectForValidation->setReservationTime($queryParams[$this->keysFetcher->getReservationTime()]);
 
@@ -54,7 +58,7 @@ class GlobalValidator extends Validator implements ValidatorInterface
         $errors = $this->validator->validate($objectForValidation);
 
         if (count($errors) === 0) {
-            // if no error is encountered then instead of empty array object is returned, which forces to have this imp 
+            // if no error is encountered then instead of empty array object is returned, which forces to have this imp
             return [];
         }
         // this can be empty or full

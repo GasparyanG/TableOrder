@@ -33,4 +33,13 @@ class Assembler implements AssemblerInterface
 
         return $arrayToBeReturned;
     }
+
+    public function getAssembledTableArray(array $notReservedTables): array
+    {
+        $assembledArray = $this->assemble($notReservedTables);
+
+        foreach($assembledArray as $tableArray) {
+            return $tableArray;
+        }
+    }
 }

@@ -13,4 +13,6 @@ interface SearchAbstractFactoryInterface
     public function getValidatorObject(); // add type hint 
 
     public function getAssembler(); // add type hint
+
+    public function getConverter(); // add type hint
 }

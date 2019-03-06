@@ -9,6 +9,10 @@ interface KeysFetcherInterface
     public function getPersonAmount(): string;
 
     public function getReservationTime(): string;
+
+    public function getRestaurantName(): string;
+
+    public function getRestaurantId(): string;
     
     public function getReservationDate(): string;
 }

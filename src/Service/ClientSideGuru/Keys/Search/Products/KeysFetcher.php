@@ -26,6 +26,16 @@ class KeysFetcher implements KeysFetcherInterface
     {
         return $this->keysConf['search']['reservationTime'];
     }
+
+    public function getRestaurantName(): string
+    {
+        return $this->keysConf['search']['restaurantName'];
+    }
+
+    public function getRestaurantId(): string
+    {
+        return $this->keysConf['search']['restaurantId'];
+    }
     
     public function getReservationDate(): string
     {

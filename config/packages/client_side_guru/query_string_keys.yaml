@@ -4,6 +4,8 @@ search:
   personAmount: 'personAmount'
   reservationTime: 'reservationTime'
   reservationDate: 'reservationDate'
+  restaurantName: 'restaurantName'
+  restaurantId: 'restaurantId'
 
 reservation:
   tableId: 'tableId'
