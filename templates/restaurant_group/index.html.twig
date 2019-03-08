@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{#
+    - [] make this data dynamic (1)
+    - [] make this form apropriate for angualr ajax call, also add required hidden fields (2)
+#}
+
+{% block title %}{{ restaurantNamePlaceholder }}{% endblock %}
+
+{% block body %}
+    {% set restaurantExists = true %}
+
+    {#restaurant data#}
+    {# 1 #}
+    {% set restaurantImg = "https://images.pexels.com/photos/1579739/pexels-photo-1579739.jpeg?cs=srgb&dl=chairs-chandelier-design-1579739.jpg&fm=jpg" %}
+    {% set restaurantName = "Tashir" %}
+    {% set restaurantRating = 4.7 %}
+    {% set amountOfReview = 360 %}
+    {% set detailedReview = [100, 200, 20, 40, 0] %}
+    {% set restaurantBranches = [{"location":"Kanaker-Zeytun", "id":3}, {"location":"Kanaker-Zeytun", "id": 3}, {"location":"Kanaker-Zeytun", "id": 3}, {"location":"Kanaker-Zeytun", "id": 3}] %}
+
+    {% if restaurantExists %}
+        {# breadcrumb #}
+        <ol class="breadcrumb">
+            {# 1 #}
+            <li class="breadcrumb-item"><a href="/restaurants">restaurants</a></li>
+            <li class="breadcrumb-item active">{{ restaurantName }}</li>
+        </ol>
+
+        {# img section #}
+        <div class="mt-4">
+            <img src={{ restaurantImg }} class="img-fluid" alt="">
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div>
+                    <h1 class="text-center">{{ restaurantName }}</h1>
+                    <hr>
+                    <div class="text-center">
+                        <span><i class="far fa-star"></i> {{ restaurantRating }}</span>
+                        <span><i class="far fa-comment-alt"></i> {{ amountOfReview }}</span>
+                    </div>
+                    <h4 class="text-center mt-4">Raiting details</h4>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda commodi consectetur consequatur consequuntur culpa, cupiditate enim error maiores maxime, minus molestiae non perferendis, qui reiciendis saepe sed sequi soluta voluptas.
+                        </div>
+                        <div class="col-md-6">
+                            {% for index, amount in detailedReview %}
+                                {% set ratings = [5,4,3,2,1] %}
+                                {# progress in percentage #}
+                                {% set progress = amount/amountOfReview * 100 %}
+                                <div class="row">
+                                    <div class="font-weight-bold col-md-1">{{ ratings[index] }}</div>
+                                    <div class="col-md-11">
+                                        <div class="progress">
+                                            <div class="progress-bar" style={{ "width:" ~ progress ~ "%"}}></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                {# concrete restaurants #}
+                <h4 class="text-center mt-4">Restaurant's branches</h4>
+                <hr>
+                <div class="row">
+                    {% for branch in restaurantBranches %}
+                        <a class="card col-md-5 mr-4 mb-4" href={{ "/restaurants/" ~ restaurantName ~ "/" ~ branch.id }}>
+                            <img src={{ restaurantImg }} class="card-img-top" alt="">
+                            <div class="card-body">
+                                <span class=""><i class="fas fa-map-marker-alt"></i> {{ branch.location }}</span>
+                                <span class=""><i class="far fa-star"></i> 4.5</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                {# search portion #}
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="card-title text-center">Find not reserved Tables</h4>
+
+                        <form action="" method="GET">
+                            <div class="form-group">
+
+                                {# 2 #}
+
+                                <div class="input-group">
+                                    <input type="time" name="reservationTime" class="form-control" ng-model="reservationTime">
+                                    <input type="date" name="reservationDate" class="form-control" ng-model="reservationDate">
+                                </div>
+                                <div class="input-group mt-2">
+                                    <select name="personAmount" id="" class="form-control" ng-model="personAmount">
+                                        {% for personAmount in arrayOfPersonAmounts %}
+                                            <option value={{personAmount}}>{{personAmount}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select name="location" id="location" class="form-control">
+                                        {% for cityName, city in cities %}
+                                            <optgroup label = {{cityName}}>
+                                                {% for region in city %}
+                                                    <option value={{region}}>{{region}}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Find Table</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            There is no restaurant with <strong>{{ restaurantName }}</strong> name
+        </div>
+    {% endif %}
+{% endblock %}

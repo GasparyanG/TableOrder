@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 class TestController extends AbstractController
 {
     /**
-     * @Route("/restaurants/{restaurantId}", name="test")
+     * ("/restaurants/{restaurantId}", name="test")
      */
     public function index(AbstractReviewMakerInterface $abstractReviewMaker, int $restaurantId, LoggerInterface $logger)
     {

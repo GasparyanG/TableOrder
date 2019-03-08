@@ -37,6 +37,7 @@ make_reservation:
   controller: App\Controller\ReservationController::reserve
   methods: [POST]
 
+# concrete restaurant portion
 restaurant:
   path: /restaurants/{restaurantName}/{restaurantId}
   controller: App\Controller\RestaurantController::getPage
@@ -48,3 +49,8 @@ test_for_ajax_search:
 concrete_restaurant_reservation:
   path: /search/concrete-restaurant
   controller: App\Controller\ConcreteRestaurantReservationController::search
+
+# restaurant group portion
+restaurant_group:
+  path: /restaurants/{restaurantName}
+  controller: App\Controller\RestaurantGroupController::getPage
