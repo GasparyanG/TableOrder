@@ -5,10 +5,10 @@ TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", 
 
    $scope.findATable = function() {
       $http({
-          url: QueryStringMaker.getQueryStringForAjaxRequest($scope),
+          url: QueryStringMaker.getQueryStringForAjaxRequest($scope, "/test"),
           method: 'GET'
       }).then(function successCallback(response) {
-          var tableState = response.data.tableState
+          var tableState = response.data.tableState;
           // some error occurred
          if (tableState === null) {
              $('#errorWhileSearching').show();

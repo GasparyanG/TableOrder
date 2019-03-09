@@ -1,16 +1,17 @@
 // -[] request directory need to be dynamic
 
 TableOrder.service("QueryStringMaker", [function() {
-    this.getQueryStringForAjaxRequest = function(scope) {
+    this.getQueryStringForAjaxRequest = function(scope, path) {
         var date = this.getDate(scope);
         var time = this.getTime(scope);
 
-        var url = "/test?";
+        var url = path + "?" ;
         url += "restaurantId=" + scope.restaurantId;
         url += "&restaurantName=" + scope.restaurantName;
         url += "&behavior=" + scope.behavior;
         url += "&reservationTime=" + time;
         url += "&reservationDate=" + date;
+        url += "&location=" + scope.location;
 
         console.log(url);
 
