@@ -54,3 +54,11 @@ concrete_restaurant_reservation:
 restaurant_group:
   path: /restaurants/{restaurantName}
   controller: App\Controller\RestaurantGroupController::getPage
+
+restaurant_group_search:
+  path: /search/ajax/restaurant-group
+  controller: App\Controller\RestaurantGroupController::ajaxSearch
+
+restaurant_group_reservation:
+  path: /search/restaurant-group
+  controller: App\Controller\RestaurantGroupController::search

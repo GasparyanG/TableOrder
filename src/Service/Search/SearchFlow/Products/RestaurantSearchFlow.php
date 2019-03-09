@@ -29,7 +29,10 @@ class RestaurantSearchFlow implements SearchFlowInterface
     {
         $queryParams = $this->request->query->all();
         // getting abstract factory
+
         $abstractFactory = $this->factory->create($queryParams);
+
+        $this->logger->info(json_encode($abstractFactory));
 
         if (!$abstractFactory) {
             return null;

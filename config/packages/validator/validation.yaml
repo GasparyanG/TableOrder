@@ -26,6 +26,19 @@ App\Service\Search\Products\ObjectsForValidation\RestaurantScopeSearchObject:
     restaurantId:
       - NotBlank: ~
 
+App\Service\Search\Products\ObjectsForValidation\RestaurantGroupValidatorObject:
+  properties:
+    personAmount:
+      - NotBlank: ~
+    reservationDate:
+      - NotBlank: ~
+    reservationTime:
+      - NotBlank: ~
+    restaurantName:
+      - NotBlank: ~
+    location:
+      - NotBlank: ~
+
 App\Entity\Reservation:
   properties:
     reservationTime:

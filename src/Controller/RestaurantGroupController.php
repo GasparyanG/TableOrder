@@ -5,6 +5,10 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\BaseLayout\BaseLayoutSupplierInterface;
 use App\Service\Restaurant\RestaurantGroupSupplier\RestaurantGroupSupplierInterface;
+use Symfony\Component\HttpFoundation\Response;
+
+// ajax search specific
+use App\Service\Search\SearchFlow\SearchFlowInterface;
 
 // for dev perspective
 use Psr\Log\LoggerInterface;
@@ -33,5 +37,37 @@ class RestaurantGroupController extends AbstractController
         $dataForClient["arrayOfPersonAmounts"] = $baseLayoutSupplier->getPersonAmount();
 
         return $dataForClient;
+    }
+
+    public function ajaxSearch(SearchFlowInterface $flow, LoggerInterface $logger)
+    {
+        $notReservedTables = $flow->getNotReservedTables();
+
+        $dataToBeReturned["tableState"] = null;
+        if (is_array($notReservedTables)) {
+            if (count($notReservedTables) > 0) {
+                // this will mean to redirect to results directory from client
+                $dataToBeReturned["tableState"] = true;
+            }
+
+            else {
+                $dataToBeReturned["tableState"] = false;
+            }
+        }
+
+        // preparing response: this can be done very easily with JsonResponse, but this is a better way
+        // to understand mechanism of working
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($dataToBeReturned));
+        // $response->setContent(json_encode($notReservedTables));
+
+        return $response;
+    }
+
+    public function search()
+    {
+        return new Response("Hello World");
     }
 }

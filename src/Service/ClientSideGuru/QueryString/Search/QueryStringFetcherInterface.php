@@ -11,6 +11,8 @@ interface QueryStringFetcherInterface extends ParentFetcherInterface
 
     public function getRestaurantBehavior(): string;
 
+    public function getRestaurantGroupBehavior(): string;
+
     public function getBehaviorKey(): string;
 
     public function getRestaurantName(array $queryString): ?string;

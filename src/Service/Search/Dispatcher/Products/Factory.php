@@ -28,7 +28,8 @@ class Factory implements FactoryInterface
         $this->productsNames = [
             // add products as they get ready
             "GlobalSearchAbstractFactory",
-            "RestaurantSearchAbstractFactory"
+            "RestaurantSearchAbstractFactory",
+            "RestaurantGroupSearchAbstractFactory"
         ];
     }
 

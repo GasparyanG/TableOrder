@@ -17,6 +17,11 @@ class QueryStringFetcher extends ParentFetcher implements QueryStringFetcherInte
         return $this->queryParamConf["search"]["behavior"]["restaurant"];
     }
 
+    public function getRestaurantGroupBehavior(): string
+    {
+        return $this->queryParamConf["search"]["behavior"]["restaurantGroup"];
+    }
+
     public function getBehaviorKey(): string
     {
         return $this->queryParamKeysConf['search']['behavior'];
