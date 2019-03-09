@@ -20,7 +20,7 @@ class RestaurantSupplier implements RestaurantSupplierInterface
 
     public function getRestaurantGroupReview(string $restaurantName): ?float
     {
-        $reviewOfRestaurant = $this->reviewRepo->getReview($restaurantName);
+        $reviewOfRestaurant = $this->reviewRepo->gerRestaurantGroupReview($restaurantName);
 
         if ($reviewOfRestaurant) {
             // this need to be dynamic
@@ -32,7 +32,13 @@ class RestaurantSupplier implements RestaurantSupplierInterface
 
     public function getRestaurantReview(int $restaurantId): ?float
     {
-        // will be implemented soon
+
+        $reviewOfRestaurant = $this->reviewRepo->getReview($restaurantId);
+
+        if ($reviewOfRestaurant) {
+            return $reviewOfRestaurant[0]["avg_review"];
+        }
+
         return null;
     }
 }
