@@ -12,12 +12,9 @@
 
     {#restaurant data#}
     {# 1 #}
-    {% set restaurantImg = "https://images.pexels.com/photos/1579739/pexels-photo-1579739.jpeg?cs=srgb&dl=chairs-chandelier-design-1579739.jpg&fm=jpg" %}
-    {% set restaurantName = "Tashir" %}
-    {% set restaurantRating = 4.7 %}
-    {% set amountOfReview = 360 %}
-    {% set detailedReview = [100, 200, 20, 40, 0] %}
-    {% set restaurantBranches = [{"location":"Kanaker-Zeytun", "id":3}, {"location":"Kanaker-Zeytun", "id": 3}, {"location":"Kanaker-Zeytun", "id": 3}, {"location":"Kanaker-Zeytun", "id": 3}] %}
+    {% set restaurant = restaurantBranches[0]['restaurant'] %}
+    {% set restaurantImg = "/photo/restaurant/cover-photo/" ~ restaurant.coverPhoto %}
+    {% set restaurantName = restaurant.name %}
 
     {% if restaurantExists %}
         {# breadcrumb #}
@@ -70,11 +67,11 @@
                 <hr>
                 <div class="row">
                     {% for branch in restaurantBranches %}
-                        <a class="card col-md-5 mr-4 mb-4" href={{ "/restaurants/" ~ restaurantName ~ "/" ~ branch.id }}>
+                        <a class="card col-md-5 mr-4 mb-4" href={{ "/restaurants/" ~ restaurantName ~ "/" ~ branch.restaurant.id }}>
                             <img src={{ restaurantImg }} class="card-img-top" alt="">
                             <div class="card-body">
-                                <span class=""><i class="fas fa-map-marker-alt"></i> {{ branch.location }}</span>
-                                <span class=""><i class="far fa-star"></i> 4.5</span>
+                                <span class=""><i class="fas fa-map-marker-alt"></i> {{ branch.restaurant.location }}</span>
+                                <span class=""><i class="far fa-star"></i> {{ branch.rating }}</span>
                             </div>
                         </a>
                     {% endfor %}
