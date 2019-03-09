@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="997244fb-43bb-4b7c-ab75-0e740d4faeab" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/js/angular/restaurant/restaurant-group/controllers/restaurant-group-ctrl.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Service/Search/AbstractFactory/Products/RestaurantGroupSearchAbstractFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Service/Search/Products/ObjectsForValidation/RestaurantGroupValidatorObject.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Service/Search/Products/Searcher/Products/RestaurantGroupSearcher.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Service/Search/Products/Validator/Products/RestaurantGroupValidator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/client_side_guru/query_string.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/client_side_guru/query_string.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/validator/validation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/validator/validation.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/angular/restaurant/controllers/restaurant-ctrl.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/angular/restaurant/controllers/restaurant-ctrl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/angular/restaurant/services/query-string-maker.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/angular/restaurant/services/query-string-maker.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/angular/services/url-guru/url-maker.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/angular/services/url-guru/url-maker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RestaurantGroupController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RestaurantGroupController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/ClientSideGuru/QueryString/Search/Products/QueryStringFetcher.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/ClientSideGuru/QueryString/Search/Products/QueryStringFetcher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/ClientSideGuru/QueryString/Search/QueryStringFetcherInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/ClientSideGuru/QueryString/Search/QueryStringFetcherInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/Search/Dispatcher/Products/Factory.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/Search/Dispatcher/Products/Factory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/Search/SearchFlow/Products/RestaurantSearchFlow.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/Search/SearchFlow/Products/RestaurantSearchFlow.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/restaurant_group/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/restaurant_group/index.html.twig" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -97,7 +81,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/js/angular/restaurant/controllers/restaurant-ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="374">
@@ -106,11 +90,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/angular/services/url-guru/url-maker.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="41" />
+            <state relative-caret-position="578">
+              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
             </state>
           </provider>
         </entry>
@@ -204,9 +188,9 @@
         <option value="$PROJECT_DIR$/templates/restaurant_group/index.html.twig" />
         <option value="$PROJECT_DIR$/config/routes.yaml" />
         <option value="$PROJECT_DIR$/src/Controller/RestaurantGroupController.php" />
-        <option value="$PROJECT_DIR$/public/js/angular/services/url-guru/url-maker.js" />
         <option value="$PROJECT_DIR$/public/js/angular/restaurant/controllers/restaurant-ctrl.js" />
         <option value="$PROJECT_DIR$/public/js/angular/restaurant/restaurant-group/controllers/restaurant-group-ctrl.js" />
+        <option value="$PROJECT_DIR$/public/js/angular/services/url-guru/url-maker.js" />
       </list>
     </option>
   </component>
@@ -533,12 +517,12 @@
       <updated>1551299612414</updated>
       <workItem from="1551299613747" duration="25635000" />
       <workItem from="1551447506239" duration="6828000" />
-      <workItem from="1551518588825" duration="167764000" />
+      <workItem from="1551518588825" duration="168021000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="200227000" />
+    <option name="totallyTimeSpent" value="200484000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -915,6 +899,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/angular/services/url-guru/url-maker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/RestaurantGroupController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="532">
@@ -943,13 +934,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="22" column="84" selection-start-line="22" selection-start-column="84" selection-end-line="22" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/angular/services/url-guru/url-maker.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="41" />
         </state>
       </provider>
     </entry>

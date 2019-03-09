@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {#
-    - [] make this data dynamic (1)
+    - [x] make this data dynamic (1)
     - [] make this form apropriate for angualr ajax call, also add required hidden fields (2)
 #}
 
 {% block title %}{{ restaurantNamePlaceholder }}{% endblock %}
 
 {% block body %}
+    <div ng-controller="RestaurantGroupCtrl">
     {% set restaurantExists = true %}
 
     {#restaurant data#}
@@ -79,20 +80,34 @@
             </div>
 
             <div class="col-md-4">
+
+                {# no table found #}
+                <div class="alert alert-info hide" id="noTableLeft">
+                    <span><strong>All tables are reserved in this restaurant!</strong> Please try again a little bit later</span>
+                </div>
+
+                {# error occurred while searhcing #}
+                <div class="alert alert-danger" id="errorWhileSearching">
+                    <span><strong>Something went wrong!</strong> Please try again</span>
+                </div>
+
                 {# search portion #}
                 <div class="card">
                     <div class="card-body">
 
                         <h4 class="card-title text-center">Find not reserved Tables</h4>
 
-                        <form action="" method="GET">
+
                             <div class="form-group">
 
                                 {# 2 #}
-
                                 <div class="input-group">
-                                    <input type="time" name="reservationTime" class="form-control" ng-model="reservationTime">
-                                    <input type="date" name="reservationDate" class="form-control" ng-model="reservationDate">
+                                    <input ng-init={{ "restaurantName='" ~ restaurantName ~ "'" }} type="hidden" name="restaurantName" value={{ restaurantName }}>
+                                    <input ng-init={{ "behavior='restaurantGroup'" }} type="hidden" name="behavior" value="restaurantGroup">
+                                </div>
+                                <div class="input-group">
+                                    <input type="time" name="reservationTime" class="form-control" ng-model="reservationTime" ng-model="reservationTime">
+                                    <input type="date" name="reservationDate" class="form-control" ng-model="reservationDate" ng-model="reservationDate">
                                 </div>
                                 <div class="input-group mt-2">
                                     <select name="personAmount" id="" class="form-control" ng-model="personAmount">
@@ -100,7 +115,7 @@
                                             <option value={{personAmount}}>{{personAmount}}</option>
                                         {% endfor %}
                                     </select>
-                                    <select name="location" id="location" class="form-control">
+                                    <select name="location" id="location" class="form-control" ng-model="location">
                                         {% for cityName, city in cities %}
                                             <optgroup label = {{cityName}}>
                                                 {% for region in city %}
@@ -111,8 +126,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <button class="btn btn-primary">Find Table</button>
-                        </form>
+                            <button class="btn btn-primary" ng-click="findTableGroup()">Find Table</button>
                     </div>
                 </div>
             </div>
@@ -122,4 +136,11 @@
             There is no restaurant with <strong>{{ restaurantName }}</strong> name
         </div>
     {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/angular/services/url-guru/url-maker.js"></script>
+    <script src="/js/angular/restaurant/services/query-string-maker.js"></script>
+    <script src="/js/angular/restaurant/restaurant-group/controllers/restaurant-group-ctrl.js"></script>
 {% endblock %}
