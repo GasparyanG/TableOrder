@@ -1,9 +1,19 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+# AUTHENTICATION
 login:
-  path: /login
+  path: /authentication/login
   controller: App\Controller\SecurityController::login
+
+sign_up:
+  path: /authentication/sign-up
+  controller: App\Controller\RegistrationController::getPage
+  methods: [GET]
+
+sign_up_post:
+  path: /authentication/sign-up
+  controller: App\Controller\RegistrationController::signUp
+  methods: [POST]
+
+
 user_page:
   path: /users/{user_id}
   controller: App\Controller\UserController::getUser
