@@ -1,16 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.firstName) }}
-        {{ form_row(registrationForm.lastName) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
+    <div ng-controller="SignUpCtrl">
+        <h1 class="text-center">Sign Up</h1>
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        <div class="mt-4">
+            <label for="firstName">First Name</label>
+            <input id="firstName" type="input" class="form-control" placeholder="First Name" ng-model="firstName" required>
+
+            <label for="lastName">Last Name</label>
+            <input id="lastName" type="input" class="form-control" placeholder="Last Name" ng-model="lastName" required>
+
+            <label for="username">Email</label>
+            <input id="username" type="input" class="form-control" placeholder="email@address.tld" ng-model="username" required>
+
+            <label for="password">Password</label>
+            <input id="password" type="password" class="form-control" placeholder="password" ng-model="password" required>
+
+            <button class="btn btn-primary mt-4" ng-click="signUp()">Sign Up</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/angular/authentication/common-services/authentication-form-nerd.js"></script>
+    <script src="/js/angular/authentication/sign-up/controller/sign-up-ctrl.js"></script>
 {% endblock %}
