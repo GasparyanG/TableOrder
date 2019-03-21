@@ -1,0 +1,7 @@
+common:
+  username: "username"
+  password: "password"
+
+sign_up:
+  first_name: "firstName"
+  last_name: "lastName"

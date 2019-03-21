@@ -48,4 +48,21 @@ App\Entity\Reservation:
     amountOfTime:
       - NotBlank: ~
       - Type: integer
-        
+
+
+ # user authentication objects
+
+App\Service\Security\Authentication\Validation\Objects\User\SignUpUser:
+  properties:
+    password:
+      - NotBlank: {message: "password should not be blank"}
+
+    username:
+      - NotBlank: {message: "username should not be blank"}
+
+    firstName:
+      - NotBlank: {message: "first name should not be blank"}
+
+    lastName:
+      - NotBlank: {message: "last name should not be blank"}
+
