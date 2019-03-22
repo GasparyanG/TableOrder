@@ -32,4 +32,15 @@ class DefaultErrorMessageFetcher implements DefaultErrorMessageFetcherInterface
     {
         return $this->defaultErrorMessageConf['reservation']['tableId'];
     }
+
+    // EMAIL SECTION
+    public function getEmailAlreadyInUse(): string
+    {
+        return $this->defaultErrorMessageConf["email"]["already_in_use"];
+    }
+
+    public function getEmailFormatIsWrong(): string
+    {
+        return $this->defaultErrorMessageConf["email"]["wrong_format"];
+    }
 }

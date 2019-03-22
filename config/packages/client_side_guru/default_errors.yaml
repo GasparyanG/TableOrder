@@ -5,3 +5,7 @@ search:
 
 reservation:
   tableId: 'tableId is missing'
+
+email:
+  wrong_format: 'Given email address has wrong format'
+  already_in_use: 'Given email address already in use'

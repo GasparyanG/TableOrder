@@ -2,6 +2,7 @@
 
 namespace App\Service\Security\Authentication\Validation\Components\Username\Products;
 
+use App\Service\ClientSideGuru\DefaultErrors\DefaultErrorMessageFetcherInterface;
 use App\Service\ClientSideGuru\Post\Authentication\SignUp\SignUpFormFetcherInterface;
 use App\Service\Security\Authentication\Validation\Components\Username\UsernameCheckerInterface;
 use Psr\Log\LoggerInterface;
@@ -14,10 +15,12 @@ use App\Entity\User;
 class UsernameChecker implements UsernameCheckerInterface
 {
     private $authenticationFetcher;
+    private $defaultErrorMessageFetcher;
 
-    public function __construct(SignUpFormFetcherInterface $authenticationFetcher, RegistryInterface $registry, LoggerInterface $logger)
+    public function __construct(SignUpFormFetcherInterface $authenticationFetcher, RegistryInterface $registry, DefaultErrorMessageFetcherInterface $defaultErrorMessageFetcher, LoggerInterface $logger)
     {
         $this->authenticationFetcher = $authenticationFetcher;
+        $this->defaultErrorMessageFetcher = $defaultErrorMessageFetcher;
 
         // db configuration
         $this->em = $registry->getEntityManager();
@@ -33,11 +36,11 @@ class UsernameChecker implements UsernameCheckerInterface
         $username = $this->authenticationFetcher->getUsername($arrayOfFormData);
 
         if ($this->usernameAlreadyExists($username)) {
-            return "given email already in use";
+            return $this->defaultErrorMessageFetcher->getEmailAlreadyInUse();
         }
 
         if (!$this->isEmail($username)) {
-            return "given email has wrong format";
+            return $this->defaultErrorMessageFetcher->getEmailFormatIsWrong();
         }
 
         // checking is passed!
@@ -69,3 +72,4 @@ class UsernameChecker implements UsernameCheckerInterface
         }
     }
 }
+
