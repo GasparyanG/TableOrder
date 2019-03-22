@@ -21,9 +21,9 @@ class RegistrationController extends AbstractController
 
     public function signUp(Request $request, JsonNerdInterface $jsonNerd, LoggerInterface $logger, SignUpFormValidationInterface $signUpFormValidation)
     {
-        $userCredentialsImproperFormat = $request->request->all();
+        $userCredentials = $request->request->all();
 
-        $userCredentials = $jsonNerd->convertToAssocArray($userCredentialsImproperFormat);
+        // $userCredentials = $jsonNerd->convertToAssocArray($userCredentialsImproperFormat);
         $errors = $signUpFormValidation->validateForm($userCredentials);
 
         $wrongEmail = $signUpFormValidation->checkUsername($userCredentials);

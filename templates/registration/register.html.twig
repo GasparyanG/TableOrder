@@ -4,28 +4,25 @@
 
 {% block body %}
 
-    <div ng-controller="SignUpCtrl">
+    <div>
         <h1 class="text-center">Sign Up</h1>
 
         <div class="mt-4">
-            <label for="firstName">First Name</label>
-            <input id="firstName" type="input" class="form-control" placeholder="First Name" ng-model="firstName" required>
+            <form action="" method="POST">
+                <label for="firstName">First Name</label>
+                <input id="firstName" type="input" class="form-control" name ="firstName" placeholder="First Name" required>
 
-            <label for="lastName">Last Name</label>
-            <input id="lastName" type="input" class="form-control" placeholder="Last Name" ng-model="lastName" required>
+                <label for="lastName">Last Name</label>
+                <input id="lastName" type="input" class="form-control" name="lastName" placeholder="Last Name" required>
 
-            <label for="username">Email</label>
-            <input id="email" type="input" class="form-control" placeholder="email@address.tld" ng-model="username" required>
+                <label for="username">Email</label>
+                <input id="email" type="input" class="form-control" name="username" placeholder="email@address.tld" required>
 
-            <label for="password">Password</label>
-            <input id="password" type="password" class="form-control" placeholder="password" ng-model="password" required>
+                <label for="password">Password</label>
+                <input id="password" type="password" class="form-control" name="password" placeholder="password" required>
 
-            <button class="btn btn-primary mt-4" ng-click="signUp()">Sign Up</button>
+                <button class="btn btn-primary mt-4">Sign Up</button>
+            </form>
         </div>
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    <script src="/js/angular/authentication/common-services/authentication-form-nerd.js"></script>
-    <script src="/js/angular/authentication/sign-up/controller/sign-up-ctrl.js"></script>
 {% endblock %}
