@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\BaseLayout\Products\BaseLayoutSupplier;
 use App\Service\ClientSideGuru\Json\JsonNerd\JsonNerdInterface;
+use App\Service\DatabaseHighLvlManipulation\Insertion\User\UserInsertionInterface;
 use App\Service\Security\Authentication\Validation\SignUpValidation\SignUpFormValidationInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
@@ -19,16 +20,23 @@ class RegistrationController extends AbstractController
         return $this->render("registration/register.html.twig", $arrayOfData);
     }
 
-    public function signUp(Request $request, JsonNerdInterface $jsonNerd, LoggerInterface $logger, SignUpFormValidationInterface $signUpFormValidation)
+    public function signUp(Request $request, JsonNerdInterface $jsonNerd, LoggerInterface $logger, SignUpFormValidationInterface $signUpFormValidation, UserInsertionInterface $userInsertion)
     {
         $userCredentials = $request->request->all();
 
         // $userCredentials = $jsonNerd->convertToAssocArray($userCredentialsImproperFormat);
         $errors = $signUpFormValidation->validateForm($userCredentials);
 
+
         $wrongEmail = $signUpFormValidation->checkUsername($userCredentials);
 
-        if (!$wrongEmail) {
+        if (!$wrongEmail && count($errors) === 0) {
+            $response = new Response("So far so good");
+
+            // user insertion
+            $userInsertion->InsertToDatabase($userCredentials);
+
+            return $response;
             // TODO: make database record about this user and send verification email!
         }
 
