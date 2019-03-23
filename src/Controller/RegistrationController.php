@@ -1,14 +1,13 @@
 <?php
 
+// TODO: handle app flow!
+
 namespace App\Controller;
 
-use App\Service\BaseLayout\Products\BaseLayoutSupplier;
-use App\Service\ClientSideGuru\Json\JsonNerd\JsonNerdInterface;
+use App\Service\BaseLayout\BaseLayoutSupplierInterface;
+# use App\Service\BaseLayout\Products\BaseLayoutSupplier;
+use App\Service\Bridge\SignUpAuthentication\SignUpAuthenticationInterface;
 use App\Service\ClientSideGuru\Post\Authentication\SignUp\SignUpFormFetcherInterface;
-use App\Service\DatabaseHighLvlManipulation\Insertion\User\UserInsertionInterface;
-use App\Service\DatabaseHighLvlManipulation\Insertion\Verification\VerificationInsertionInterface;
-use App\Service\Mailer\MailerInterface;
-use App\Service\Security\Authentication\Validation\SignUpValidation\SignUpFormValidationInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,46 +15,46 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RegistrationController extends AbstractController
 {
-    public function getPage(BaseLayoutSupplier $baseLayoutSupplier)
+    public function getPage(BaseLayoutSupplierInterface $baseLayoutSupplier)
     {
         $arrayOfData = $this->getBaseLayoutComponents($baseLayoutSupplier);
 
         return $this->render("registration/register.html.twig", $arrayOfData);
     }
 
-    public function signUp(Request $request, JsonNerdInterface $jsonNerd, LoggerInterface $logger, SignUpFormValidationInterface $signUpFormValidation, UserInsertionInterface $userInsertion, VerificationInsertionInterface $verificationInsertion, SignUpFormFetcherInterface $signUpFormFetcher, MailerInterface $mailer)
+    public function signUp(Request $request, LoggerInterface $logger, SignUpAuthenticationInterface $signUpAuthentication, BaseLayoutSupplierInterface $baseLayoutSupplier, SignUpFormFetcherInterface $signUpFormFetcher)
     {
+        $arrayOfData = $this->getBaseLayoutComponents($baseLayoutSupplier);
+
         $userCredentials = $request->request->all();
 
+        if ($signUpAuthentication->requiresToBeVerified($userCredentials)) {
+            return $this->redirect($this->generateUrl("verification", array("username" => $signUpFormFetcher->getUsername($userCredentials))));
+        }
+
         // $userCredentials = $jsonNerd->convertToAssocArray($userCredentialsImproperFormat);
-        $errors = $signUpFormValidation->validateForm($userCredentials);
+        $errors = $signUpAuthentication->validateForm($userCredentials);
 
-
-        $wrongEmail = $signUpFormValidation->checkUsername($userCredentials);
+        $wrongEmail = $signUpAuthentication->checkUsername($userCredentials);
 
         if (!$wrongEmail && count($errors) === 0) {
             // user insertion
-            $userInsertion->InsertToDatabase($userCredentials);
-            $verificationInsertion->insertToDatabase($userCredentials);
+            $signUpAuthentication->insertUserToDatabase($userCredentials);
+            $signUpAuthentication->insertVerificationToDatabase($userCredentials);
 
-            $username = $signUpFormFetcher->getUsername($userCredentials);
-            $mailer->sendVerificationCode($username);
+            $signUpAuthentication->sendVerificationCode($userCredentials);
 
-            return $this->redirectToRoute("verification");
+            // 1
+            return $this->redirect($this->generateUrl("verification", array("username" => $signUpFormFetcher->getUsername($userCredentials))));
         }
 
         else {
             $errors[] = $wrongEmail;
         }
 
+        $arrayOfData["errors"] = $errors;
 
-        // for testing only
-        $response = new Response();
-
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setContent(json_encode($errors));
-
-        return $response;
+        return $this->render("registration/register.html.twig", $arrayOfData);
     }
 
     private function getBaseLayoutComponents($baseLayoutSupplier): array
@@ -64,6 +63,7 @@ class RegistrationController extends AbstractController
 
         $arrayOfData["cities"] = $baseLayoutSupplier->getLocation();
         $arrayOfData["arrayOfPersonAmounts"] = $baseLayoutSupplier->getPersonAmount();
+        $arrayOfData["errors"] = [];
 
         return $arrayOfData;
     }
