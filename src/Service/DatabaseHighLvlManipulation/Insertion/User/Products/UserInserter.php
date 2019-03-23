@@ -31,7 +31,7 @@ class UserInserter implements UserInsertionInterface
         $this->em = $registry->getEntityManager();
     }
 
-    public function InsertToDatabase(array $userCredentials)
+    public function InsertToDatabase(array $userCredentials): void
     {
         $user = new User();
 

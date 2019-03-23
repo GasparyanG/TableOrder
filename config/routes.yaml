@@ -13,6 +13,18 @@ sign_up_post:
   controller: App\Controller\RegistrationController::signUp
   methods: [POST]
 
+# VERIFICATION
+verification:
+  path: /authentication/verification
+  controller: App\Controller\VerificationController::getPage
+  methods: [GET]
+
+verification_post:
+  path: /authentication/verification
+  controller: App\Controller\VerificationController::verify
+  methods: [POST]
+
+
 
 user_page:
   path: /users/{user_id}

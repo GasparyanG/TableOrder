@@ -1,0 +1,1 @@
+<h1>Your verification code is <?= $verificationCode ?></h1>

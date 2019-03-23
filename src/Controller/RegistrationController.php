@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Service\BaseLayout\Products\BaseLayoutSupplier;
 use App\Service\ClientSideGuru\Json\JsonNerd\JsonNerdInterface;
+use App\Service\ClientSideGuru\Post\Authentication\SignUp\SignUpFormFetcherInterface;
 use App\Service\DatabaseHighLvlManipulation\Insertion\User\UserInsertionInterface;
+use App\Service\DatabaseHighLvlManipulation\Insertion\Verification\VerificationInsertionInterface;
+use App\Service\Mailer\MailerInterface;
 use App\Service\Security\Authentication\Validation\SignUpValidation\SignUpFormValidationInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
@@ -20,7 +23,7 @@ class RegistrationController extends AbstractController
         return $this->render("registration/register.html.twig", $arrayOfData);
     }
 
-    public function signUp(Request $request, JsonNerdInterface $jsonNerd, LoggerInterface $logger, SignUpFormValidationInterface $signUpFormValidation, UserInsertionInterface $userInsertion)
+    public function signUp(Request $request, JsonNerdInterface $jsonNerd, LoggerInterface $logger, SignUpFormValidationInterface $signUpFormValidation, UserInsertionInterface $userInsertion, VerificationInsertionInterface $verificationInsertion, SignUpFormFetcherInterface $signUpFormFetcher, MailerInterface $mailer)
     {
         $userCredentials = $request->request->all();
 
@@ -31,13 +34,14 @@ class RegistrationController extends AbstractController
         $wrongEmail = $signUpFormValidation->checkUsername($userCredentials);
 
         if (!$wrongEmail && count($errors) === 0) {
-            $response = new Response("So far so good");
-
             // user insertion
             $userInsertion->InsertToDatabase($userCredentials);
+            $verificationInsertion->insertToDatabase($userCredentials);
 
-            return $response;
-            // TODO: make database record about this user and send verification email!
+            $username = $signUpFormFetcher->getUsername($userCredentials);
+            $mailer->sendVerificationCode($username);
+
+            return $this->redirectToRoute("verification");
         }
 
         else {
