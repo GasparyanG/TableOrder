@@ -13,4 +13,6 @@ interface SignUpAuthenticationInterface
     public function insertVerificationToDatabase(array $userCredentials): void;
 
     public function sendVerificationCode(array $userCredentials): void;
+
+    public function requiresToBeVerified(array $userCredentials): bool;
 }

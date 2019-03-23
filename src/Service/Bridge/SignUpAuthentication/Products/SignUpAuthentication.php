@@ -8,6 +8,7 @@ use App\Service\DatabaseHighLvlManipulation\Insertion\User\UserInsertionInterfac
 use App\Service\DatabaseHighLvlManipulation\Insertion\Verification\VerificationInsertionInterface;
 use App\Service\Mailer\MailerInterface;
 use App\Service\Security\Authentication\Validation\SignUpValidation\SignUpFormValidationInterface;
+use App\Service\Security\Authentication\Verification\VerificationHandlerInterface;
 
 class SignUpAuthentication implements SignUpAuthenticationInterface
 {
@@ -16,18 +17,21 @@ class SignUpAuthentication implements SignUpAuthenticationInterface
     private $verificationInsertion;
     private $signUpFormFetcher;
     private $mailer;
+    private $verificationHandler;
 
     public function __construct(SignUpFormValidationInterface $signUpFormValidation,
                                 UserInsertionInterface $userInsertion,
                                 VerificationInsertionInterface $verificationInsertion,
                                 SignUpFormFetcherInterface $signUpFormFetcher,
-                                MailerInterface $mailer)
+                                MailerInterface $mailer,
+                                VerificationHandlerInterface $verificationHandler)
     {
         $this->signUpFormValidation = $signUpFormValidation;
         $this->userInsertion = $userInsertion;
         $this->verificationInsertion = $verificationInsertion;
         $this->signUpFormFetcher = $signUpFormFetcher;
         $this->mailer = $mailer;
+        $this->verificationHandler = $verificationHandler;
     }
 
     public function validateForm(array $userCredentials): array
@@ -54,5 +58,12 @@ class SignUpAuthentication implements SignUpAuthenticationInterface
     {
         $username = $this->signUpFormFetcher->getUsername($userCredentials);
         $this->mailer->sendVerificationCode($username);
+    }
+
+    public function requiresToBeVerified(array $userCredentials): bool
+    {
+        $username = $this->signUpFormFetcher->getUsername($userCredentials);
+
+        return $this->verificationHandler->requiresToBeVerified($username);
     }
 }
