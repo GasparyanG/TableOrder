@@ -7,6 +7,14 @@
     <div>
         <h1 class="text-center">Sign Up</h1>
 
+        {% if  errors %}
+            <div class="mt-4">
+                {% for error in errors %}
+                    <div class="alert alert-danger mt-1 text-center">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <div class="mt-4">
             <form action="" method="POST">
                 <label for="firstName">First Name</label>
