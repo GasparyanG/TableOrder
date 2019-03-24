@@ -2,6 +2,7 @@
 
 namespace App\Service\Security\Authentication\Verification;
 
+use App\Service\ConfigurationFetcher\AppSimpleConfig\AppSimpleConfigFetcherInterface;
 use App\Service\Mailer\MailerInterface;
 use App\Service\Security\Authentication\Verification\Generator\VerificationGeneratorInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -18,8 +19,9 @@ class VerificationHandler implements VerificationHandlerInterface
     private $verificationRepo;
     private $verificationGenerator;
     private $mailer;
+    private $appSimpleConfigFetcher;
 
-    public function __construct(RegistryInterface $registry, VerificationGeneratorInterface $verificationGenerator, MailerInterface $mailer, LoggerInterface $logger)
+    public function __construct(RegistryInterface $registry, VerificationGeneratorInterface $verificationGenerator, MailerInterface $mailer, AppSimpleConfigFetcherInterface $appSimpleConfigFetcher, LoggerInterface $logger)
     {
         // DEV
         $this->logger = $logger;
@@ -27,6 +29,7 @@ class VerificationHandler implements VerificationHandlerInterface
         // PROD
         $this->verificationGenerator = $verificationGenerator;
         $this->mailer = $mailer;
+        $this->appSimpleConfigFetcher = $appSimpleConfigFetcher;
 
         // db
         $this->em = $registry->getEntityManager();
@@ -46,6 +49,58 @@ class VerificationHandler implements VerificationHandlerInterface
 
             $this->mailer->sendVerificationCode($email);
 
+            return true;
+        }
+
+        return false;
+    }
+
+    public function setTries(Verification $verification): void
+    {
+        $tries = $verification->getTries();
+
+        $triesLimit = $this->appSimpleConfigFetcher->getTriesAmount();
+
+        // TRIES = NULL
+        if ($tries === null) {
+            $verification->setTries(1);
+
+            $this->em->persist($verification);
+            $this->em->flush();
+        }
+
+        // TRIES < TRIES LIMIT
+        elseif ($tries < $triesLimit) {
+            $verification->setTries($tries + 1);
+
+            $this->em->persist($verification);
+            $this->em->flush();
+        }
+
+        // TRIES = TRIES LIMIT
+        elseif ($tries === $triesLimit) {
+            // setting code
+            $verificationCode = $this->verificationGenerator->getVerificationCode();
+            $verification->setCode($verificationCode);
+
+            // setting tries to null
+            $verification->setTries(null);
+
+            // persist and flush
+            $this->em->persist($verification);
+            $this->em->flush();
+
+            // sending email to verification's email address
+            $email = $verification->getEmail();
+            $this->mailer->sendVerificationCode($email);
+        }
+    }
+
+    public function isVerified(Verification $verification, string $verificationCode): bool
+    {
+        $realCode = $verification->getCode();
+
+        if ($realCode == $verificationCode) {
             return true;
         }
 
