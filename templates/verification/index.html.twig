@@ -1,6 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello VerificationController!{% endblock %}
+{% block title %}Verification{% endblock %}
 
 {% block body %}
+
+    <div class="m-4 w-50">
+        <div class="mb-4 text-center">
+            <h1>Verification</h1>
+            <small class="alert alert-info">Verification code <strong>is sent</strong> to address mentioned by you</small>
+        </div>
+
+        {% if tryAgain %}
+
+            <h4 class="alert alert-warning mt-4">Try Again</h4>
+
+        {% endif %}
+
+        <form action="" method="POST">
+            <input id="verification" type="input" class="form-control" name="verificationCode" placeholder="verification code here">
+            <button class="btn btn-primary mt-2">Verify</button>
+        </form>
+    </div>
 {% endblock %}
