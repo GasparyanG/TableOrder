@@ -4,7 +4,14 @@
 
 {% block body %}
 
+
     <div class="m-4 w-50">
+        {% if errors|length > 0 %}
+            {% for error in errors %}
+                <div class="alert alert-danger m-2">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+
         <div class="mb-4 text-center">
             <h1>Verification</h1>
             <small class="alert alert-info">Verification code <strong>is sent</strong> to address mentioned by you</small>
