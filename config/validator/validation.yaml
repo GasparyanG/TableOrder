@@ -66,3 +66,13 @@ App\Service\Security\Authentication\Validation\Objects\User\SignUpUser:
     lastName:
       - NotBlank: {message: "last name should not be blank"}
 
+
+# verification
+
+App\Service\Security\Authentication\Validation\Objects\Verification\LessPropertyVerification:
+  properties:
+    username:
+      - NotBlank: {message: "email is missing"}
+
+    verificationCode:
+      - NotBlank: {message: "verification code should not be blank"}

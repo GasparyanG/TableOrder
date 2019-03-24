@@ -5,3 +5,6 @@ common:
 sign_up:
   first_name: "firstName"
   last_name: "lastName"
+
+verification:
+  verificationCode: "verificationCode"
