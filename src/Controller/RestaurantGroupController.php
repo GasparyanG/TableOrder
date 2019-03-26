@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\BaseLayout\BaseLayoutSupplierInterface;
 use App\Service\Restaurant\RestaurantGroupSupplier\RestaurantGroupSupplierInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 // ajax search specific
@@ -66,8 +67,14 @@ class RestaurantGroupController extends AbstractController
         return $response;
     }
 
-    public function search()
+    public function search(SearchFlowInterface $flow, BaseLayoutSupplierInterface $baseLayoutSupplier, Request $request)
     {
-        return new Response("Hello World");
+        $dataForClient = $this->getDataForClient($baseLayoutSupplier);
+        $notReservedTables = $flow->getNotReservedTables();
+
+        $dataForClient["notReservedTables"] = $notReservedTables;
+        $dataForClient["queryParams"] = $request->query->all();
+
+        return $this->render("concrete_restaurant_reservation/index.html.twig", $dataForClient);
     }
 }
