@@ -101,6 +101,10 @@ class VerificationHandler implements VerificationHandlerInterface
         $realCode = $verification->getCode();
 
         if ($realCode == $verificationCode) {
+            // remove from database!
+            $this->em->remove($verification);
+            $this->em->flush();
+
             return true;
         }
 
