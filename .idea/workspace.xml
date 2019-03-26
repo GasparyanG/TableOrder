@@ -33,7 +33,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller/RestaurantGroupController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="702">
@@ -93,6 +93,13 @@
             <state relative-caret-position="-148">
               <caret line="32" selection-start-line="32" selection-end-line="32" />
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Controller/ReservationController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1165" />
           </provider>
         </entry>
       </file>
@@ -439,12 +446,12 @@
       <workItem from="1551518588825" duration="168021000" />
       <workItem from="1552807220558" duration="45892000" />
       <workItem from="1553412415391" duration="2228000" />
-      <workItem from="1553414996644" duration="40065000" />
+      <workItem from="1553414996644" duration="40335000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="348565000" />
+    <option name="totallyTimeSpent" value="348835000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -518,13 +525,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/verification/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Service/ClientSideGuru/Post/Authentication/SignUp/SignUpFormFetcherInterface.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -801,13 +801,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/routes.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-148">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/RestaurantGroupController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="702">
@@ -816,6 +809,18 @@
             <element signature="e#35#100#0#PHP" expanded="true" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/routes.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-148">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/ReservationController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1165" />
       </provider>
     </entry>
   </component>
