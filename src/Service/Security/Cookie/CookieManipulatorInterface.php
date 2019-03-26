@@ -11,5 +11,5 @@ interface CookieManipulatorInterface
      * */
     public function createCookie(): ?string;
 
-    // TODO: think about set cookie!
+    public function setCookie(string $cookie): void;
 }

@@ -16,4 +16,9 @@ class CookieFetcher implements CookieFetcherInterface
     {
         return $this->cookieConf['key']['user']['cookieId'];
     }
+
+    public function getExpTime(): int
+    {
+        return $this->cookieConf['key']['user']['expTime'];
+    }
 }
