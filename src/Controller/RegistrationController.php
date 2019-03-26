@@ -1,7 +1,5 @@
 <?php
 
-// TODO: handle app flow!
-
 namespace App\Controller;
 
 use App\Service\BaseLayout\BaseLayoutSupplierInterface;

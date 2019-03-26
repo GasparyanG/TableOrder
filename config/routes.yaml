@@ -29,6 +29,7 @@ verification_post:
 user_page:
   path: /users/{user_id}
   controller: App\Controller\UserController::getUser
+
 success:
   path: /success
   controller: App\Controller\SuccessController::showSuccessMessage

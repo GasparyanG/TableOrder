@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="aab31ebb-04de-464a-80ef-a14d5c85c094" name="gg@snn" url="http://gasparyan.am">
-        <fileTransfer host="gasparyan.am" port="22" rootFolder="/home/gg/programing/web-development/php/apps/TableOrder" accessType="SFTP">
+        <fileTransfer host="gasparyan.am" port="22" rootFolder="/var/www_gg/table_order" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
