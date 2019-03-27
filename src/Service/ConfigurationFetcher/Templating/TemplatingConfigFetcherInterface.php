@@ -7,4 +7,10 @@ interface TemplatingConfigFetcherInterface
     public function getDefaultPath(): string;
 
     public function getVerificationCodeVar(): string;
+
+    public function getPersonAmount(): string;
+
+    public function getCities(): string;
+
+    public function getUser(): string;
 }

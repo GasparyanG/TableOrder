@@ -25,4 +25,19 @@ class TemplatingConfigFetcher implements TemplatingConfigFetcherInterface
     {
         return $this->templateVarsConfig["verification"]["verificationCode"];
     }
+
+    public function getPersonAmount(): string
+    {
+        return $this->templateVarsConfig["navBar"]['search']['personAmount'];
+    }
+
+    public function getCities(): string
+    {
+        return $this->templateVarsConfig["navBar"]['search']['cities'];
+    }
+
+    public function getUser(): string
+    {
+        return $this->templateVarsConfig["navBar"]['user']['user'];
+    }
 }

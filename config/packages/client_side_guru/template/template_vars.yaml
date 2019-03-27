@@ -1,2 +1,10 @@
 verification:
   verificationCode: "verificationCode"
+
+navBar:
+  search:
+    personAmount: 'arrayOfPersonAmounts'
+    cities: 'cities'
+
+  user:
+    user: 'user'
