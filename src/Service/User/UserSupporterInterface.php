@@ -6,5 +6,9 @@ use App\Entity\User;
 
 interface UserSupporterInterface
 {
-    public function getUser(): User;
+    public function getUser(): ?User;
+
+    public function isAuthenticated(): bool;
+
+    public function getUserData(): array;
 }
