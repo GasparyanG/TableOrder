@@ -8,3 +8,8 @@ navBar:
 
   user:
     user: 'user'
+
+
+rating:
+  review: 'review'
+  restaurantRating: 'restaurantRating'

@@ -1,85 +1,44 @@
 <div>
-    <h3><i class="fas fa-star"></i> Rated Restaurants <em><span class="text-muted">12</span></em> <a href="#ratings" class="btn btn-info float-right">See More</a></h3>
+    <h3><i class="fas fa-star"></i> Rated Restaurants <em><span class="text-muted">{{ amountOfRatings }}</span></em> <a href="#ratings" class="btn btn-info float-right">See More</a></h3>
     <hr>
 
-    <div class="row">
-        <div class="col-6 mb-3">
-            <a href="/restaurants/tashir/3">
-                <div class="card" style="width: 18rem">
-                    <img src="photo/restaurant/cover-photo/127.0.0.1_1549270407.jpeg" class="card-img-top" alt="restaurant-img">
-                    <div class="card-body">
-                        <h5 class="card-title">Tashir</h5>
-                        <span><i class="fas fa-map-marker-alt"></i> Kanaker-Zeytun  <i class="fas fa-star"></i> 4.7</span>
-                    </div>
+    {% if reviews|length == 0 %}
+        <h4 class="text-center">No Ratings Done Yet</h4>
+    {% else %}
+        {% for review in reviews %}
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <a href={{ "/restaurants/" ~ review.review.restaurant.name ~ "/" ~ review.review.restaurant.id }}>
+                        <div class="card" style="width: 18rem">
+                            <img src={{ "photo/restaurant/cover-photo/" ~ review.review.restaurant.coverPhoto }} class="card-img-top" alt="restaurant-img">
+                            <div class="card-body">
+                                <h5 class="card-title"> {{ review.review.restaurant.name }} </h5>
+                                <span><i class="fas fa-map-marker-alt"></i> {{ review.review.restaurant.location }} <i class="fas fa-star"></i> {{ review.restaurantRating }}</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
 
-        <div class="col-6 align-middle">
-            <div>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
+                {% set userRating = review.review.review %}
+                {% set notRated = 5 - userRating %}
+                <div class="col-6 align-middle">
+                    <div>
 
-                <small class="text-muted">ratied at 19/03/2019 20:00</small>
-            </div>
+                        {% for index in range(1, userRating) %}
+                            {% include "base-components/rating/rated.html.twig" %}
+                        {% endfor %}
 
-        </div>
-    </div>
+                        {% if notRated != 0 %}
+                            {% for index in range(1,notRated) %}
+                                {% include "base-components/rating/not-rated.html.twig" %}
+                            {% endfor %}
+                        {% endif %}
 
-    <div class="row">
-        <div class="col-6 mb-3">
-            <a href="/restaurants/tashir/3">
-                <div class="card" style="width: 18rem">
-                    <img src="photo/restaurant/cover-photo/127.0.0.1_1549270407.jpeg" class="card-img-top" alt="restaurant-img">
-                    <div class="card-body">
-                        <h5 class="card-title">Tashir</h5>
-                        <span><i class="fas fa-map-marker-alt"></i> Kanaker-Zeytun  <i class="fas fa-star"></i> 4.7</span>
+                        <small class="text-muted"> rated at {{ review.review.date.format("Y-m-d") }} {{ review.review.reviewTime.format("H:i") }}</small>
                     </div>
+
                 </div>
-            </a>
-        </div>
-
-        <div class="col-6 align-middle">
-            <div>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star"></i></span>
-
-                <small class="text-muted">ratied at 19/03/2019 20:00</small>
             </div>
-
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-6 mb-3">
-            <a href="/restaurants/tashir/3">
-                <div class="card" style="width: 18rem">
-                    <img src="photo/restaurant/cover-photo/127.0.0.1_1549270407.jpeg" class="card-img-top" alt="restaurant-img">
-                    <div class="card-body">
-                        <h5 class="card-title">Tashir</h5>
-                        <span><i class="fas fa-map-marker-alt"></i> Kanaker-Zeytun  <i class="fas fa-star"></i> 4.7</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-6 align-middle">
-            <div>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star text-warning"></i></span>
-                <span><i class="fas fa-star"></i></span>
-                <span><i class="fas fa-star"></i></span>
-
-                <small class="text-muted">ratied at 19/03/2019 20:00</small>
-            </div>
-
-        </div>
-    </div>
+        {% endfor %}
+    {% endif %}
 </div>
