@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Reservation;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,9 +16,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ReservationRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(RegistryInterface $registry, LoggerInterface $logger)
     {
         parent::__construct($registry, Reservation::class);
+
+        $this->logger = $logger;
     }
 
     // /**
@@ -96,5 +100,49 @@ class ReservationRepository extends ServiceEntityRepository
             ->setParameter("tableId", $table)
             ->getQuery()
             ->getResult();
+    }
+
+
+    // REQUIRED FOR CONCRETE USER
+    public function findUpcomingReservations(User $user, int $amountToReturn, string $currentTime, string $currentDate): array
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        return $qb->where($qb->expr()->andX('r.user = :user',
+            'r.reservationDate >= :reservationDate'))
+            ->orderBy('r.reservationTime', 'ASC')
+            ->setMaxResults($amountToReturn)
+            ->setParameter('user', $user)
+            ->setParameter('reservationDate', $currentDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findPassedReservations(User $user, int $amountToReturn, string $currentTime, string $currentDate): array
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        return $qb->where($qb->expr()->andX('r.user = :user',
+            'r.reservationDate < :reservationDate'))
+            ->orderBy('r.reservationTime', 'ASC')
+            ->setMaxResults($amountToReturn)
+            ->setParameter('user', $user)
+            ->setParameter('reservationDate', $currentDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    // amount of reservations done by one user
+    public function findAmountOfReservations(User $user): int
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        $amountOfReservations = $qb->select('count(r.user) as amountOfReservations')
+            ->where('r.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+
+        return $amountOfReservations[0]['amountOfReservations'];
     }
 }
