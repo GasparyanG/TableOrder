@@ -40,4 +40,14 @@ class TemplatingConfigFetcher implements TemplatingConfigFetcherInterface
     {
         return $this->templateVarsConfig["navBar"]['user']['user'];
     }
+
+    public function getReview(): string
+    {
+        return $this->templateVarsConfig["rating"]['review'];
+    }
+
+    public function getRestaurantRating(): string
+    {
+        return $this->templateVarsConfig["rating"]['restaurantRating'];
+    }
 }

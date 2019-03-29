@@ -13,4 +13,8 @@ interface TemplatingConfigFetcherInterface
     public function getCities(): string;
 
     public function getUser(): string;
+
+    public function getReview(): string;
+
+    public function getRestaurantRating(): string;
 }
