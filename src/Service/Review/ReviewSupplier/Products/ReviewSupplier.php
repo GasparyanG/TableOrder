@@ -3,23 +3,39 @@
 namespace App\Service\Review\ReviewSupplier\Products;
 
 use App\Service\Review\ReviewSupplier\ReviewSupplierInterface;
+use App\Service\Review\ReviewSupplier\User\UserRatingsSupplierInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 // entities
 use App\Entity\Review;
 use Psr\Log\LoggerInterface;
+use App\Entity\User;
 
 class ReviewSupplier implements ReviewSupplierInterface
 {
-    public function __construct(RegistryInterface $registry, LoggerInterface $logger)
-    {
-        $this->ratings = [5, 4, 3, 2, 1];
+    private $ratings;
+    private $matchAll;
+    private $em;
+    private $reviewRepo;
+    private $userRatingsSupplier;
 
-        $this->logger = $logger;
+    // dev
+    private $logger;
+
+    public function __construct(RegistryInterface $registry, UserRatingsSupplierInterface $userRatingsSupplier, LoggerInterface $logger)
+    {
+        // static config: TODO: forward to yaml config files!
+        $this->ratings = [5, 4, 3, 2, 1];
         $this->matchAll = "%";
 
+        $this->userRatingsSupplier = $userRatingsSupplier;
+
+        // db
         $this->em = $registry->getManager();
         $this->reviewRepo = $this->em->getRepository(Review::class);
+
+        // dev
+        $this->logger = $logger;
     }
 
     public function getReviewForRestaurant(?string $restaurantName, ?int $restaurantId = null): ?float
@@ -87,5 +103,15 @@ class ReviewSupplier implements ReviewSupplierInterface
 
             return $arrayOfRatings;
         }
+    }
+
+    public function getUserRatings(User $user, bool $dashboard = true): array
+    {
+        return $this->userRatingsSupplier->getUserRatings($user, $dashboard);
+    }
+
+    public function getUserRatingAmount(User $user): int
+    {
+        return $this->userRatingsSupplier->getUserRatingAmount($user);
     }
 }
