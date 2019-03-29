@@ -1,0 +1,14 @@
+#dashboard section
+{
+    margin-top: 2rem;
+}
+
+#dashboard section > div
+{
+    margin-top: 2rem;
+}
+
+#user-content img
+{
+    width: 150px;
+}
