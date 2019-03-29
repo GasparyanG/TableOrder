@@ -7,3 +7,8 @@ reservation:
     passed:
       limit: 3
       max: 1111111
+
+dashboard:
+  disp:
+    limit: 3
+    max: 11111111

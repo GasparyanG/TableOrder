@@ -33,4 +33,14 @@ class DatabaseFetcher implements DatabaseFetcherInterface
     {
         return $this->databaseConstraintsConf["reservation"]["dashboard"]["passed"]["max"];
     }
+
+    public function getDashboardDisplayingLimit(): int
+    {
+        return $this->databaseConstraintsConf["dashboard"]["disp"]["limit"];
+    }
+
+    public function getDashboardDisplayingMax(): int
+    {
+        return $this->databaseConstraintsConf["dashboard"]["disp"]["max"];
+    }
 }
