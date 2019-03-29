@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Review;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\User;
 
 /**
  * @method Review|null find($id, $lockMode = null, $lockVersion = null)
@@ -118,5 +119,29 @@ class ReviewRepository extends ServiceEntityRepository
             ->setParameter('rating', $rating)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findUserRatings(User $user, $amountOfRatings)
+    {
+       $qb = $this->createQueryBuilder("r");
+
+       return $qb->where('r.user = :user')
+           ->setMaxResults($amountOfRatings)
+           ->setParameter('user', $user)
+           ->getQuery()
+           ->getResult();
+    }
+
+    public function getUserAmountOfRatings(User $user): int
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        $amountOfRatings = $qb->select('count(r.user) as amountOfRatings')
+            ->where('r.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+
+        return $amountOfRatings[0]["amountOfRatings"];
     }
 }
