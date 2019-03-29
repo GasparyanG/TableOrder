@@ -1,0 +1,9 @@
+reservation:
+  dashboard:
+    upcoming:
+      limit: 3
+      max: 1111111
+
+    passed:
+      limit: 3
+      max: 1111111
