@@ -85,3 +85,14 @@ restaurant_group_search:
 restaurant_group_reservation:
   path: /search/restaurant-group
   controller: App\Controller\RestaurantGroupController::search
+
+
+# DASHBOARD
+dashboard:
+  path: /me
+  controller: App\Controller\DashboardController::getPage
+
+# TESTING
+data_preparing:
+  path: /client/data
+  controller: App\Controller\TestController::getRequiredData
