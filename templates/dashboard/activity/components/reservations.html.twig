@@ -1,0 +1,28 @@
+<div>
+    {# 1 #}
+    <h3><i class="fas fa-book"></i> Reservations made <em><span class="text-muted">{{ amountOfReservations }}</span></em> <a href="#see-more" class="btn btn-info float-right">See More</a></h3>
+    <hr>
+
+    <h4>Upcoming Reservations</h4>
+    {% if reservations %}
+
+        <div class="row">
+            {% for reservation in reservations %}
+                <div class="card col-3 mr-4">
+                    <h5 class="card-header text-center"><span>{{ reservation.restauran.name }}</span></h5>
+                    <div class="card-body">
+                        <div><i class="fas fa-map-marker-alt"></i> Location: {{ reservation.restauran.location }}</div>
+                        <div><i class="fas fa-hashtag"></i> Table Number: {{ reservation.table.personAmount }}</div>
+                        <div><i class="fas fa-hourglass-start"></i> Amount of Time: {{ reservation.amountOfTime }}</div>
+                    </div>
+                    <div class="card-footer">
+                        <div><i class="fas fa-calendar"></i> Reservation time and date {{ reservation.reservationDate.format("Y-m-d") }} {{ reservation.reservationTime.format("H:i") }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <h4 class="text-center">No Reservation made yet</h4>
+    {% endif %}
+</div>

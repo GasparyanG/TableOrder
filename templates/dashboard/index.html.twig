@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Me{% endblock %}
+
+{% block body %}
+
+    <div id="dashboard">
+        {# information about user #}
+        {% include "/dashboard/user/info.html.twig" %}
+        {# activity #}
+        {% include "/dashboard/activity/main.html.twig" %}
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="css/dashboard/user/main-style.css">
+{% endblock %}
