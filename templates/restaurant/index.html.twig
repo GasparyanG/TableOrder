@@ -26,8 +26,10 @@
     </div>
     <div class="row mb-5">
         <div class="col-md-8">
-            {# restaurant.name #}
-            <h1 class="text-center">{{ restaurant.name }}</h1>
+
+            {# title with some operations #}
+            {% include "restaurant/sections/metadata/title.html.twig" %}
+
             <hr>
             <div class="text-center">
                 {# review #}
@@ -122,6 +124,10 @@
 
 {% block javascripts %}
     {# services #}
+    {# highlighting bookamrk #}
+    <script src="/js/angular/app-func/bookmark/view/bookmark-view.js"></script>
+    {# bookmark handelr #}
+    <script src="/js/angular/app-func/bookmark/services/bookmark-handler.js"></script>
     {# url maker #}
     <script src="/js/angular/services/url-guru/url-maker.js"></script>
     {# query string maker #}
