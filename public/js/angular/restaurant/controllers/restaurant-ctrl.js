@@ -1,4 +1,4 @@
-TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", "UrlMaker", function($scope, $http, QueryStringMaker, UrlMaker) {
+TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", "UrlMaker", "BookmarkHandler", function($scope, $http, QueryStringMaker, UrlMaker, BookmarkHandler) {
     // hide all alerts at the beginning
     $('#noTableLeft').hide();
     $('#errorWhileSearching').hide();
@@ -27,4 +27,8 @@ TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", 
          console.log("err");
       });
    }
+
+   $scope.bookmark = function(url) {
+       BookmarkHandler.bookmark(url);
+    }
 }]);
