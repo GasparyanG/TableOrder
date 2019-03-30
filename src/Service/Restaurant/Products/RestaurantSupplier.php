@@ -2,20 +2,36 @@
 
 namespace App\Service\Restaurant\Products;
 
+use App\Service\Restaurant\UserRestaurantInteraction\Visiting\VisitDescriberInterface;
 use App\Service\Restaurant\RestaurantSupplierInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Psr\Log\LoggerInterface;
 
 // entities
 use App\Entity\Review;
+
+// DEV
+use Psr\Log\LoggerInterface;
+
+
 class RestaurantSupplier implements RestaurantSupplierInterface
 {
-    public function __construct(RegistryInterface $registry, loggerInterface $logger)
-    {
-        $this->logger =$logger;
+    private $em;
+    private $reviewRepo;
+    private $visitDescriber;
 
+    // DEV
+    private $logger;
+
+    public function __construct(RegistryInterface $registry,
+                                loggerInterface $logger,
+                                VisitDescriberInterface $visitDescriber)
+    {
         $this->em = $registry->getManager();
         $this->reviewRepo = $this->em->getRepository(Review::class);
+        $this->visitDescriber = $visitDescriber;
+
+        // DEV
+        $this->logger =$logger;
     }
 
     public function getRestaurantGroupReview(string $restaurantName): ?float
@@ -40,5 +56,10 @@ class RestaurantSupplier implements RestaurantSupplierInterface
         }
 
         return null;
+    }
+
+    public function visitedByUser(int $restaurantId): bool
+    {
+        return $this->visitDescriber->visitedByUser($restaurantId);
     }
 }
