@@ -1,5 +1,5 @@
-TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", "UrlMaker", "BookmarkHandler", "CommentHandler",
-    function($scope, $http, QueryStringMaker, UrlMaker, BookmarkHandler, CommentHandler) {
+TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", "UrlMaker", "BookmarkHandler", "CommentHandler", "RatingHandler",
+    function($scope, $http, QueryStringMaker, UrlMaker, BookmarkHandler, CommentHandler, RatingHandler) {
     // hide all alerts at the beginning
     $('#noTableLeft').hide();
     $('#errorWhileSearching').hide();
@@ -31,7 +31,7 @@ TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", 
       }, function errorCallback(response) {
          console.log("err");
       });
-   }
+   };
 
    // BOOKMARK
    $scope.bookmark = function(url) {
@@ -41,5 +41,9 @@ TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", 
     // COMMENT
     $scope.addComment = function(url){
       CommentHandler.addComment($scope, url);
+    };
+
+    $scope.rate = function(rating, url) {
+        RatingHandler.rate(rating, url);
     }
 }]);
