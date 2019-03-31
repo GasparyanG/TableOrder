@@ -14,7 +14,7 @@ class CommentSupplier implements CommentSupplierInterface
         $this->commentFetcher = $commentFetcher;
     }
 
-    public function getCommentFromPhpInputFile(): string
+    public function getCommentFromPhpInputFile(): ?string
     {
         return $this->commentFetcher->getCommentFromPhpInputFile();
     }

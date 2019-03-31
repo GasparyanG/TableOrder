@@ -19,11 +19,15 @@ class CommentFetcher implements CommentFetcherInterface
         $this->keysFetcher = $keysFetcher;
     }
 
-    public function getCommentFromPhpInputFile(): string
+    public function getCommentFromPhpInputFile(): ?string
     {
         // data from $_POST
         $content = $this->externalSourceSupplier->getPhpInputFileContent();
         $assocArrayFromClient = json_decode($content, true);
+
+        if (!$assocArrayFromClient) {
+            return null;
+        }
 
         return $assocArrayFromClient[$this->keysFetcher->getComment()];
     }

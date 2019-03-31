@@ -40,6 +40,10 @@ class AjaxHandler implements AjaxHandlerInterface
     {
         $comment = $this->commentSupplier->getCommentFromPhpInputFile();
 
+        if (!$comment) {
+            return false;
+        }
+
         // comment validation
         $errors = $this->commentValidator->validate($comment);
 
