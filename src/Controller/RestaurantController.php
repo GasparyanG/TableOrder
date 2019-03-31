@@ -35,6 +35,14 @@ class RestaurantController extends AbstractController
     {
         $bookmarkState = $bookmarkStateMaintainer->checkBookmarkState($restaurantId);
 
+        // rated
+        $rated = $restaurantSupplier->ratedByUser($restaurantId);
+
+        $rating = false;
+        if ($rated) {
+            $rating = $restaurantSupplier->getUserRating($restaurantId);
+        }
+
         // visited
         $visited = $restaurantSupplier->visitedByUser($restaurantId);
 
@@ -58,7 +66,8 @@ class RestaurantController extends AbstractController
             "cities" => $formHelper->getLocationsForChoiceType(),
             "arrayOfPersonAmounts" => $formHelper->getPersonAmountArray(),
             "bookmarked" => $bookmarkState,
-            "visited" => $visited
+            "visited" => $visited,
+            "rating" => $rating
         ]);
     }
 }
