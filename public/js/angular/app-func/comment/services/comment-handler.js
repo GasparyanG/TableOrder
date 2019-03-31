@@ -13,7 +13,15 @@ TableOrder.service("CommentHandler", ["$http", function($http){
             }
 
         }).then(function successCallback(response) {
-            console.log(response.data);
+
+            if (response.data["status"]) {
+                $('#commentSubmitted').show();
+            }
+
+            else {
+                $('#submitError').show();
+            }
+
         }, function errorCallback(response) {
             console.log('error');
         })

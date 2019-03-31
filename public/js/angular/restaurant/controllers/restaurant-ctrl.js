@@ -1,7 +1,12 @@
-TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", "UrlMaker", "BookmarkHandler", function($scope, $http, QueryStringMaker, UrlMaker, BookmarkHandler) {
+TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", "UrlMaker", "BookmarkHandler", "CommentHandler",
+    function($scope, $http, QueryStringMaker, UrlMaker, BookmarkHandler, CommentHandler) {
     // hide all alerts at the beginning
     $('#noTableLeft').hide();
     $('#errorWhileSearching').hide();
+
+    // comment section
+    $('#commentSubmitted').hide();
+    $('#submitError').hide();
 
    $scope.findATable = function() {
       $http({
@@ -28,7 +33,13 @@ TableOrder.controller("RestaurantCtrl", ["$scope", "$http", "QueryStringMaker", 
       });
    }
 
+   // BOOKMARK
    $scope.bookmark = function(url) {
        BookmarkHandler.bookmark(url);
+    };
+
+    // COMMENT
+    $scope.addComment = function(url){
+      CommentHandler.addComment($scope, url);
     }
 }]);
