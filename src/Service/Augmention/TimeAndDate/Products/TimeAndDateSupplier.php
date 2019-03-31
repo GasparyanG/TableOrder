@@ -21,4 +21,10 @@ class TimeAndDateSupplier implements TimeAndDateSupplierInterface
 
         return $currentTime;
     }
+
+    public function getTime(): string
+    {
+        return time();
+    }
+
 }

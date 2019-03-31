@@ -7,4 +7,6 @@ interface TimeAndDateSupplierInterface
     public function getCurrentTime(): string;
 
     public function getCurrentDate(): string;
+
+    public function getTime(): string;
 }
