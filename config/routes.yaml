@@ -25,10 +25,16 @@ verification_post:
   methods: [POST]
 
 
+
 # AJAX FUNCTIONALITY
 bookmark:
   path: /restaurants/{restaurantId}/bookmark
   controller: App\Controller\BookmarkController::ajaxBookmark
+
+comment:
+  path: /restaurants/{restaurantId}/comment
+  controller: App\Controller\CommentController::addComment
+
 
 
 user_page:
