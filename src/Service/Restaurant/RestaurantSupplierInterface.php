@@ -2,6 +2,8 @@
 
 namespace App\Service\Restaurant;
 
+use App\Entity\Review;
+
 interface RestaurantSupplierInterface
 {
     public function getRestaurantGroupReview(string $restaurantName): ?float;
@@ -10,4 +12,7 @@ interface RestaurantSupplierInterface
 
     public function visitedByUser(int $restaurantId): bool;
 
+    public function ratedByUser(int $restaurantId): bool;
+
+    public function getUserRating(int $restaurantId): Review;
 }
