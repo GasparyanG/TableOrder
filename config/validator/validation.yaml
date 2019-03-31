@@ -50,7 +50,7 @@ App\Entity\Reservation:
       - Type: integer
 
 
- # user authentication objects
+ # USER
 
 App\Service\Security\Authentication\Validation\Objects\User\SignUpUser:
   properties:
@@ -67,7 +67,7 @@ App\Service\Security\Authentication\Validation\Objects\User\SignUpUser:
       - NotBlank: {message: "last name should not be blank"}
 
 
-# verification
+# VERIFICATION
 
 App\Service\Security\Authentication\Validation\Objects\Verification\LessPropertyVerification:
   properties:
@@ -76,3 +76,10 @@ App\Service\Security\Authentication\Validation\Objects\Verification\LessProperty
 
     verificationCode:
       - NotBlank: {message: "verification code should not be blank"}
+
+
+# COMMENT
+App\Service\Security\Validation\Objects\Comment:
+  properties:
+    comment:
+      - NotBlank: {message: "comment is missing"}
