@@ -18,4 +18,9 @@ class KeysFetcher implements KeysFetcherInterface
     {
         return $this->keysConfig["restaurant"]["comment"];
     }
+
+    public function getRating(): string
+    {
+        return $this->keysConfig["restaurant"]["rating"];
+    }
 }
