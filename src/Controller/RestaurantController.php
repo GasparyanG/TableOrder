@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\Bookmark\BookmarkMaintaining\BookmarkStateMaintainerInterface;
+use App\Service\Restaurant\RestaurantSupplierInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Search\Interfaces\SearchFormInterface;
@@ -29,9 +30,13 @@ class RestaurantController extends AbstractController
                             SearchFormInterface $formHelper,
                             ReviewSupplierInterface $reviewSupplier,
                             BookmarkStateMaintainerInterface $bookmarkStateMaintainer,
+                            RestaurantSupplierInterface $restaurantSupplier,
                             LoggerInterface $logger)
     {
         $bookmarkState = $bookmarkStateMaintainer->checkBookmarkState($restaurantId);
+
+        // visited
+        $visited = $restaurantSupplier->visitedByUser($restaurantId);
 
         // restaurant
         if (!$this->existenceHandler->restaurantExists($restaurantName, $restaurantId)) {
@@ -52,7 +57,8 @@ class RestaurantController extends AbstractController
             "amountOfReview" => $amountOfReview,
             "cities" => $formHelper->getLocationsForChoiceType(),
             "arrayOfPersonAmounts" => $formHelper->getPersonAmountArray(),
-            "bookmarked" => $bookmarkState
+            "bookmarked" => $bookmarkState,
+            "visited" => $visited
         ]);
     }
 }
