@@ -1,0 +1,33 @@
+#rating
+{
+    maring-top: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
+#rating > div
+{
+    margin-right: 0.1rem;
+    margin-left: 0.5rem;
+
+    color: #ddd
+}
+
+#rating > div:hover
+{
+    cursor: pointer !important;
+    color: #FFD700 !important;
+}
+
+#rating > div:hover ~ div
+{
+    color: #FFD700;
+}
+
+
+#success
+{
+    width: 50%;
+    position: absolute;
+    bottom: 5rem;
+}
