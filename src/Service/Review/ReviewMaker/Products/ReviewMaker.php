@@ -2,34 +2,55 @@
 
 namespace App\Service\Review\ReviewMaker\Products;
 
+use App\Service\ConfigurationFetcher\Keys\KeysFetcherInterface;
+use App\Service\ExternalSource\ExternalSourceSupplierInterface;
 use App\Service\Review\ReviewMaker\ReviewMakerInterface;
+use App\Service\User\UserSupporterInterface;
 
 // symfony components
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\HttpFoundation\Request;
-use App\Service\ClientSideGuru\QueryString\Search\QueryStringFetcherInterface;
-use App\Service\User\UserSupporterInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Psr\Log\LoggerInterface;
 
 // entities
 use App\Entity\Review;
 use App\Entity\Restaurant;
 
+// DEV
+use Psr\Log\LoggerInterface;
+
 class ReviewMaker implements ReviewMakerInterface
 {
-    public function __construct(ValidatorInterface $validator, QueryStringFetcherInterface $fetcher, UserSupporterInterface $userSupporter, RegistryInterface $doctrine, LoggerInterface $logger)
+    private $externalSourceSupplier;
+    private $keysFetcher;
+    private $userSupporter;
+    private $validator;
+
+    // db
+    private $em;
+    private $restaurantRepo;
+
+    // DEV
+    private $logger;
+
+    public function __construct(ValidatorInterface $validator,
+                                UserSupporterInterface $userSupporter,
+                                RegistryInterface $doctrine,
+                                ExternalSourceSupplierInterface $externalSourceSupplier,
+                                KeysFetcherInterface $keysFetcher,
+                                LoggerInterface $logger)
     {
+        $this->externalSourceSupplier = $externalSourceSupplier;
+        $this->keysFetcher = $keysFetcher;
+
         // repo config
-        $this->doctrine = $doctrine;
-        $this->em = $this->doctrine->getManager();
+        $this->em = $doctrine->getManager();
         $this->restaurantRepo = $this->em->getRepository(Restaurant::class);
 
         $this->userSupporter = $userSupporter;
-        $this->fetcher = $fetcher;
         $this->validator = $validator;
-        $this->request = Request::createFromGlobals();
 
+
+        // DEV
         $this->logger = $logger;
     }
 
@@ -38,31 +59,36 @@ class ReviewMaker implements ReviewMakerInterface
     {
         $review = new Review();
 
-        $postArray = $this->request->request->all();
-        $this->logger->info("start");
-        $this->logger->info(json_encode($postArray));
-        $this->logger->info("end");
-        $reviewValue = $this->fetcher->getReviewValue($postArray);
+        $jsonFromClient = $this->externalSourceSupplier->getPhpInputFileContent();
+        $jsonToAssocArray = json_decode($jsonFromClient, true);
 
-        $this->logger->info("start");
-        $this->logger->info($reviewValue);
-        $this->logger->info("end");
-
-        if (!$reviewValue) {
+        if (!$jsonToAssocArray) {
             return false;
         }
 
+        $reviewValue = $jsonToAssocArray[$this->keysFetcher->getRating()];
+
         // actual value
         $review->setReview($reviewValue);
-        // relations
-        $review->setUser($this->userSupporter->getUser());
-        $review->setRestaurant($this->restaurantRepo->find($restaurantId));
-        
+
+        // user
+        $user = $this->userSupporter->getUser();
+        $review->setUser($user);
+
+        // restaurant
+        $restaurant = $this->restaurantRepo->find($restaurantId);
+        $review->setRestaurant($restaurant);
+
+        //restaurant name
+        $review->setRestaurantName($restaurant->getName());
+
         // setting time and date
         $currentTime = time();
+
         // time
         $time = new \DateTime(date("H:i:s", $currentTime));
         $review->setReviewTime($time);
+
         //date
         $date = new \DateTime(date("Y-m-d", $currentTime));
         $review->setDate($date);
