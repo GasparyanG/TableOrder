@@ -1,10 +1,37 @@
 <div>
-    <h4 class="text-center">My Review</h4>
+    <h4 class="text-center">Your Review</h4>
     <hr>
     <div>
-        <div>
-            <h1 class="text-center">Rating is missing</h1>
-        </div>
+
+        {% if  rating %}
+            <div class="row mb-4">
+                <div class="col-4">
+                    <h5><span class="text-muted">Your Rating is </span><strong class="text-weight-bold">{{ rating.review }}</strong></h5>
+                </div>
+                <div class="col-8">
+                    {% set notRated = 5 - rating.review %}
+
+                    {% for index in range(1, rating.review) %}
+                        {% include "base-components/rating/rated.html.twig" %}
+                    {% endfor %}
+
+                    {% if notRated != 0 %}
+                        {% for index in range(1,notRated) %}
+                            {% include "base-components/rating/not-rated.html.twig" %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <small class="text-muted"> rated at {{ rating.date.format("Y-m-d") }} {{ rating.reviewTime.format("H:i") }}</small>
+
+                </div>
+            </div>
+
+        {% else %}
+            <div>
+                {% include "restaurant/sections/review/ratings.html.twig" %}
+            </div>
+        {% endif %}
+
 
         <div class="alert alert-success text-center" id="commentSubmitted">
             Your comment is <strong>submitted</strong>! To see it refresh this page.

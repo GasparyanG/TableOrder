@@ -1,0 +1,32 @@
+<div id="success">
+
+</div>
+
+<section id="rating-section" class="mt-4 mb-4">
+    <div class="row">
+        <div class="col-4">
+            <h5 class="text-muted">Rate Please</h5>
+        </div>
+
+        <div id="rating" class="col-8">
+            <div title="Very bad - 1" ng-click={{ "rate(1,'/restaurants/" ~ restaurant.id ~ "/rating')" }}>
+                <i class="fas fa-star"></i>
+            </div>
+            <div title="Bad - 2" ng-click={{ "rate(2,'/restaurants/" ~ restaurant.id ~ "/rating')" }}>
+                <i class="fas fa-star"></i>
+            </div>
+            <div title="Not Bad - 3" ng-click={{ "rate(3,'/restaurants/" ~ restaurant.id ~ "/rating')" }}>
+                <i class="fas fa-star"></i>
+            </div>
+            <div title="Good - 4" ng-click={{ "rate(4,'/restaurants/" ~ restaurant.id ~ "/rating')" }}>
+                <i class="fas fa-star"></i>
+            </div>
+            <div title="Grate - 5" ng-click={{ "rate(5,'/restaurants/" ~ restaurant.id ~ "/rating')" }}>
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+    </div>
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/restaurant/rating-section.css">
+{% endblock %}
