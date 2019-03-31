@@ -35,6 +35,9 @@ comment:
   path: /restaurants/{restaurantId}/comment
   controller: App\Controller\CommentController::addComment
 
+rating:
+ path: /restaurants/{restaurantId}/rating
+ controller: App\Controller\RatingController::addRating
 
 
 user_page:
