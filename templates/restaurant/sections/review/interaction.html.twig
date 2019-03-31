@@ -1,0 +1,32 @@
+<div>
+    <h4 class="text-center">My Review</h4>
+    <hr>
+    <div>
+        <div>
+            <h1 class="text-center">Rating is missing</h1>
+        </div>
+
+        <div class="alert alert-success text-center" id="commentSubmitted">
+            Your comment is <strong>submitted</strong>! To see it refresh this page.
+
+            <div>
+                <small class = text-muted>I was very lazy at that day and don't add js rendering :)</small>
+            </div>
+        </div>
+
+        <div class="alert alert-warning text-center" id="submitError">
+            Sth went wrong. Please try again!
+        </div>
+
+        <div class="input-group">
+
+            <input id="comment" type="text" class="form-control" name="comment" ng-model="comment">
+
+            <div class="input-group-append">
+                <button class="btn btn-success" ng-click={{ "addComment('/restaurants/" ~ restaurant.id ~ "/comment')" }}>Add Comment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

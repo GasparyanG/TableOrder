@@ -73,6 +73,26 @@
                     {% endfor %}
                 </div>
             </div>
+
+            {# REVIEW SECTION #}
+
+            <div class="mt-4 mb-4" id="review">
+                {% if visited %}
+                    {# interaction #}
+                    {% include "restaurant/sections/review/interaction.html.twig" %}
+                {% else %}
+                    <h4 class="text-center">My Review</h4>
+                    <h5>To make review you need to visit this restaurant first</h5>
+                    {# to make review you need to visit this restaurant #}
+                {% endif %}
+
+                {# COMMENTS #}
+                <div id="comments" class="mt-4 mb-4">
+                    {% include "restaurant/sections/review/comments.html.twig" %}
+                </div>
+
+
+            </div>
         </div>
 
 
@@ -124,6 +144,8 @@
 
 {% block javascripts %}
     {# services #}
+    {# comment #}
+    <script src="/js/angular/app-func/comment/services/comment-handler.js"></script>
     {# highlighting bookamrk #}
     <script src="/js/angular/app-func/bookmark/view/bookmark-view.js"></script>
     {# bookmark handelr #}

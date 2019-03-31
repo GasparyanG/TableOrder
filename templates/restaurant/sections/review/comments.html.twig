@@ -1,0 +1,39 @@
+{% if restaurant.comments|length == 0 %}
+{% else %}
+
+    <h4>Comments {{ restaurant.comments|length }}</h4>
+    <hr>
+
+    {% for comment in restaurant.comments|reverse %}
+        <div class="mt-4">
+            <div class="row">
+
+                <div class="col-3">
+                    <div>
+                        <img src="/photo/user/default-imgs/user.png" alt={{ comment.user.firstName }}>
+                    </div>
+
+                    <div class="text-muted">
+                        {{ comment.user.firstName }} {{ comment.user.lastName }}
+                    </div>
+                </div>
+
+                <div class="col-9">
+                    <div class="text-muted">
+                        {{ comment.comment }}
+                    </div>
+
+                    <div class="text-muted text-right">
+                        <small>at {{ comment.commentTime | date("d/m/y") }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+
+{% endif %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/restaurant/comment-section.css">
+{% endblock %}
