@@ -94,12 +94,18 @@ class Restaurant
      */
     private $bookmarks;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="restaurant", orphanRemoval=true)
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->restaurantTables = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->bookmarks = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -357,6 +363,37 @@ class Restaurant
             // set the owning side to null (unless already changed)
             if ($bookmark->getRestaurant() === $this) {
                 $bookmark->setRestaurant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getRestaurant() === $this) {
+                $comment->setRestaurant(null);
             }
         }
 
