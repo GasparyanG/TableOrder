@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Bookmark;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\User;
 
 /**
  * @method Bookmark|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +48,30 @@ class BookmarkRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getUserBookmarks(User $user, int $limit)
+    {
+       $qb = $this->createQueryBuilder("b");
+
+       return $qb->where("b.user = :user")
+           ->setMaxResults($limit)
+           ->setParameter("user", $user)
+           ->getQuery()
+           ->getResult();
+    }
+
+    public function getAmountOfUserBookmarks(User $user): int
+    {
+        $qb = $this->createQueryBuilder("b");
+
+        $amountOfBookmarks = $qb->select("count(b.user) as amountOfBookmarks")
+            ->where("b.user = :user")
+            ->setParameter("user", $user)
+            ->getQuery()
+            ->getResult();
+
+        $amount = $amountOfBookmarks[0]["amountOfBookmarks"];
+
+        return $amount;
+    }
 }
