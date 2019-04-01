@@ -1,3 +1,5 @@
 restaurant:
   comment: 'comment'
   rating: 'rating'
+  bookmark: 'bookmark'
+  restaurant: 'restaurant'
