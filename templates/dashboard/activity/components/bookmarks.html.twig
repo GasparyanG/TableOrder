@@ -1,0 +1,27 @@
+<div>
+    <h3><i class="far fa-bookmark"></i> Bookmarks <em><span class="text-muted">{{ amountOfBookmarks }}</span></em> </h3>
+    <hr>
+
+    {% if bookmarks|length == 0 %}
+        <h4 class="text-center">No Bookmarks Yet</h4>
+    {% else %}
+        {% for bookmark in bookmarks %}
+            <div class="row">
+
+                <div class="col-6">
+                    <div class="card">
+                        <img class="card-img-top" src={{ "/photo/restaurant/cover-photo/" ~ bookmark.bookmark.restaurant.coverPhoto }} alt="">
+                        <div class="card-body">
+                            <h5 class="card-title"> {{ bookmark.bookmark.restaurant.name }} </h5>
+                            <span><i class="fas fa-map-marker-alt"></i> {{ bookmark.bookmark.restaurant.location }} <i class="fas fa-star"></i> {{ bookmark.restaurant.rating}}</span>
+                        </div>
+
+                        <div class="card-footer">
+                            <i class="far fa-clock"></i> Bookmarked at {{ bookmark.bookmark.bookmarkDateTime.format("Y-m-d H:i") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
