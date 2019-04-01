@@ -4,6 +4,7 @@ namespace App\Service\Restaurant\RestaurantData\Products;
 
 use App\Service\Restaurant\RestaurantData\RestaurantDataPopulaterInterface;
 use App\Service\Restaurant\RestaurantSupplierInterface;
+use App\Entity\Restaurant;
 
 class RestaurantDataPopulater implements RestaurantDataPopulaterInterface
 {
