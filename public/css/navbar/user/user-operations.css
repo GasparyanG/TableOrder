@@ -1,0 +1,23 @@
+#user-operations
+{
+    font-size: 1.2rem;
+    display:flex;
+    flex-diraction:row;
+}
+
+#user-operations > div
+{
+    margin-right: 1rem;
+}
+
+#user-operations > div a
+{
+    color: rgba(0,0,0,0.5);
+    text-decoration: none;
+}
+
+#user-operations > div a:hover
+{
+    color: rgba(0,0,0,0.9);
+}
+

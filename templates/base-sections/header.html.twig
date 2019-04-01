@@ -1,6 +1,6 @@
 {#
-    - [] use conditions to not ask authenticated user to sign up/log in (1)
-    - [] search button need to be shown if required (2) (given true need to be dynamic)
+    - [x] use conditions to not ask authenticated user to sign up/log in (1)
+    - [x] search button need to be shown if required (2) (given true need to be dynamic)
 #}
 <div>
     <nav class="navbar navbar-light navbar-expand-lg bg-light">
@@ -13,22 +13,31 @@
             <ul class="navbar-nav mr-auto">
 
             </ul>
-            {# 1 #}
-            
-            <div class="my-2 my-lg-0">
-                <button class="btn btn-primary">
-                    Sign Up
-                </button>
-                <button class="btn btn-outline-secondary">
-                    Log In
-                </button>
-                {# 2 #}
-                {% if true %}
-                    <button class="btn btn-outline-success" data-toggle="collapse" data-target="#mainSearchFormGroup">
-                        <i class="fas fa-search fa-1.5x"></i>
+            {% if user %}
+
+                {# authenticated user #}
+                {% include "/base-sections/individual-components/user/authenticated-user.html.twig" %}
+
+            {% else %}
+
+                <div class="my-2 my-lg-0">
+                    <button class="btn btn-primary">
+                        Sign Up
                     </button>
-                {% endif %}
-            </div>
+                    <button class="btn btn-outline-secondary">
+                        Log In
+                    </button>
+                </div>
+            {% endif %}
+            {% if true %}
+                <button class="btn btn-outline-success" data-toggle="collapse" data-target="#mainSearchFormGroup">
+                    <i class="fas fa-search fa-1.5x"></i>
+                </button>
+           {% endif %}
         </div>
     </nav>
 </div>
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/navbar/user/user-operations.css">
+{% endblock %}
