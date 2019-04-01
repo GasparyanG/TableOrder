@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Service\BaseLayout\ClientDataComposerInterface;
+use App\Service\Bookmark\BookmarkSupplierInterface;
 use App\Service\Reservation\ReservationSupplier\ReservationSupplierInterface;
+use App\Service\Restaurant\RestaurantData\RestaurantDataPopulaterInterface;
 use App\Service\Review\ReviewSupplier\ComposedReview\ComposedReviewInterface;
 use App\Service\Review\ReviewSupplier\ReviewSupplierInterface;
 use App\Service\User\UserSupporterInterface;
@@ -19,6 +21,7 @@ class DashboardController extends AbstractController
                             UserSupporterInterface $userSupporter,
                             ReviewSupplierInterface $reviewSupplier,
                             ComposedReviewInterface $reviewComposer,
+                            BookmarkSupplierInterface $bookmarkSupplier,
                             LoggerInterface $logger)
     {
         $clientData = $clientDataComposer->composeData();
@@ -39,12 +42,17 @@ class DashboardController extends AbstractController
         $reviews = $reviewSupplier->getUserRatings($user);
 
         if (count($reviews) === 0) {
-            $clientData["review"] = null;
+            $clientData["reviews"] = null;
         }
 
         else {
             $clientData["reviews"] = $reviewComposer->getComposedReview($user);
         }
+
+        // BOOKMARKS
+        $clientData["bookmarks"] = $bookmarkSupplier->getUserComposedBookmarks();
+
+        $clientData["amountOfBookmarks"] = $bookmarkSupplier->getAmountOfUserBookmarks();;
 
         $clientData["amountOfRatings"] = $reviewSupplier->getUserRatingAmount($user);
 
