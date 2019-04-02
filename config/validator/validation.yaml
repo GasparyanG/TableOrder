@@ -83,3 +83,19 @@ App\Service\Security\Validation\Objects\Comment:
   properties:
     comment:
       - NotBlank: {message: "comment is missing"}
+
+
+# RESERVATION
+App\Service\Security\Validation\Objects\Reservation:
+  properties:
+    personAmount:
+      - NotBlank: {message: "person amount should not be blank"}
+
+    tableId:
+      - NotBlank: {message: "table id should not be blank"}
+
+    reservationTime:
+      - NotBlank: {message: "reservation time amount should not be blank"}
+
+    reservationDate:
+      - NotBlank: {message: "reservation date should not be blank"}
