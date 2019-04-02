@@ -9,4 +9,6 @@ interface TimeAndDateSupplierInterface
     public function getCurrentDate(): string;
 
     public function getTime(): string;
+
+    public function fromFuture(string $timeAndDate): bool;
 }

@@ -27,4 +27,15 @@ class TimeAndDateSupplier implements TimeAndDateSupplierInterface
         return time();
     }
 
+    public function fromFuture(string $timeAndDate): bool
+    {
+        $currentTimeAndDate = $this->getCurrentDate() . " " . $this->getCurrentTime();
+
+        if ($currentTimeAndDate > $timeAndDate) {
+            return false;
+        }
+
+        return true;
+    }
+
 }
