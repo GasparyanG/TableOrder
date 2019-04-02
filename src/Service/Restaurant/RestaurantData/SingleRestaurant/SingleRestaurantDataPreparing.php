@@ -25,6 +25,7 @@ class SingleRestaurantDataPreparing implements SingleRestaurantDataPreparingInte
     public function populateRestaurant(Restaurant $restaurant): array
     {
         $this->addRating($restaurant);
+        $this->addRestaurant($restaurant);
 
         return $this->restaurantData;
     }
@@ -36,5 +37,10 @@ class SingleRestaurantDataPreparing implements SingleRestaurantDataPreparingInte
         $rating = $this->restaurantSupplier->getRestaurantReview($restaurantId);
 
         $this->restaurantData[$this->keysFetcher->getRating()] = $rating;
+    }
+
+    protected function addRestaurant(Restaurant $restaurant): void
+    {
+        $this->restaurantData[$this->keysFetcher->getRestaurant()] = $restaurant;
     }
 }
