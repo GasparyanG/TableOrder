@@ -15,6 +15,7 @@
 namespace App\Controller;
 
 use App\Service\Reservation\ReservationSupplier\Products\ReservationSupplier;
+use App\Service\User\Data\Composed\UserDataComposerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,12 +43,21 @@ class ReservationController extends AbstractController
         $this->defaultErrorMessageFetcher = $defaultErrorMessageFetcher;
     }
 
-    public function getPage(Request $request, LoggerInterface $logger, ReservationBridgeInterface $reservationBridge, $restaurantName, $restaurantId, SearchFormInterface $formHelper, RestaurantSupplierInterface $restaurantSupplier, ReservationSupplierInterface $reservationSupplier)
+    public function getPage(Request $request,
+                            LoggerInterface $logger,
+                            ReservationBridgeInterface $reservationBridge,
+                            $restaurantName, $restaurantId,
+                            SearchFormInterface $formHelper,
+                            RestaurantSupplierInterface $restaurantSupplier,
+                            UserDataComposerInterface $userDataComposer,
+                            ReservationSupplierInterface $reservationSupplier)
     {
         // this section need to be changed to obey DRY principle
         $arrayOfData = $this->getCommonDataForClient($formHelper);
         $reservation = $reservationBridge->prepareReservationWithoutAmountOfTime();
         $arrayOfData["reservation"] = $reservation;
+
+        $arrayOfData["user"] = $userDataComposer->composeData();
 
         // next, previous reservations
         $arrayOfData["prevReservation"] = $reservationSupplier->getPreviousReservation($reservation->getReservationTime()->format("H:i:s"), $reservation->getReservationDate()->format("Y-m-d"), $reservation->getTable());
@@ -88,13 +98,19 @@ class ReservationController extends AbstractController
         return $this->render("reservation/index.html.twig", $arrayOfData);
     }
 
-    public function reserve(PostReservationBridgeInterface $postReservationBridge, SearchFormInterface $formHelper, RestaurantSupplierInterface $restaurantSupplier, ReservationSupplierInterface $reservationSupplier)
+    public function reserve(PostReservationBridgeInterface $postReservationBridge,
+                            SearchFormInterface $formHelper,
+                            RestaurantSupplierInterface $restaurantSupplier,
+                            UserDataComposerInterface $userDataComposer,
+                            ReservationSupplierInterface $reservationSupplier)
     {
         // this section is being repeated
         $arrayOfData = $this->getCommonDataForClient($formHelper);
 
         $reservation = $postReservationBridge->prepareReservation();
         $arrayOfData["reservation"] = $reservation;
+
+        $arrayOfData["user"] = $userDataComposer->composeData();
 
         // next and prev reservations
         $arrayOfData["prevReservation"] = $reservationSupplier->getPreviousReservation($reservation->getReservationTime()->format("H:i:s"), $reservation->getReservationDate()->format("Y-m-d"), $reservation->getTable());

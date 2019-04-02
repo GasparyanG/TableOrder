@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\Bookmark\BookmarkMaintaining\BookmarkStateMaintainerInterface;
 use App\Service\Restaurant\RestaurantSupplierInterface;
+use App\Service\User\Data\Composed\UserDataComposerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Search\Interfaces\SearchFormInterface;
@@ -31,9 +32,13 @@ class RestaurantController extends AbstractController
                             ReviewSupplierInterface $reviewSupplier,
                             BookmarkStateMaintainerInterface $bookmarkStateMaintainer,
                             RestaurantSupplierInterface $restaurantSupplier,
+                            UserDataComposerInterface $userDataComposer,
                             LoggerInterface $logger)
     {
         $bookmarkState = $bookmarkStateMaintainer->checkBookmarkState($restaurantId);
+
+        // user data
+        $userData = $userDataComposer->composeData();
 
         // rated
         $rated = $restaurantSupplier->ratedByUser($restaurantId);
@@ -67,7 +72,8 @@ class RestaurantController extends AbstractController
             "arrayOfPersonAmounts" => $formHelper->getPersonAmountArray(),
             "bookmarked" => $bookmarkState,
             "visited" => $visited,
-            "rating" => $rating
+            "rating" => $rating,
+            "user" => $userData
         ]);
     }
 }

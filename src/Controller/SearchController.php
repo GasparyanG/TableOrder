@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\User\Data\Composed\UserDataComposerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,12 @@ use App\Service\Search\Dispatcher\FactoryInterface;
 
 class SearchController extends AbstractController
 {
-    public function getResult(Request $request, FactoryInterface $factory, LoggerInterface $logger, DefaultErrorMessageFetcherInterface $defaultMsgFetcher, SearchFormInterface $formHelper)
+    public function getResult(Request $request,
+                              FactoryInterface $factory,
+                              LoggerInterface $logger,
+                              DefaultErrorMessageFetcherInterface $defaultMsgFetcher,
+                              UserDataComposerInterface $userDataComposer,
+                              SearchFormInterface $formHelper)
     {
         $queryParams = $request->query->all();
 
@@ -24,6 +30,9 @@ class SearchController extends AbstractController
         $dataToReturnToClient["notReservedTables"] = false;
         $dataToReturnToClient["cities"] = $formHelper->getLocationsForChoiceType();
         $dataToReturnToClient["arrayOfPersonAmounts"] = $formHelper->getPersonAmountArray();
+
+        // add user
+        $dataToReturnToClient["user"] = $userDataComposer->composeData();
         
         // $logger->info($dataToReturnToClient);
      

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\User\Data\Composed\UserDataComposerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\BaseLayout\BaseLayoutSupplierInterface;
 use App\Service\Restaurant\RestaurantGroupSupplier\RestaurantGroupSupplierInterface;
@@ -17,7 +18,11 @@ use Psr\Log\LoggerInterface;
 
 class RestaurantGroupController extends AbstractController
 {
-    public function getPage($restaurantName, BaseLayoutSupplierInterface $baseLayoutSupplier, RestaurantGroupSupplierInterface $restaurantGroupSupplier, LoggerInterface $logger)
+    public function getPage($restaurantName,
+                            BaseLayoutSupplierInterface $baseLayoutSupplier,
+                            RestaurantGroupSupplierInterface $restaurantGroupSupplier,
+                            UserDataComposerInterface $userDataComposer,
+                            LoggerInterface $logger)
     {
         $dataForClient = $this->getDataForClient($baseLayoutSupplier);
         $dataForClient["restaurantNamePlaceholder"] = $restaurantName;
@@ -26,6 +31,8 @@ class RestaurantGroupController extends AbstractController
         $dataForClient["restaurantRating"] = $restaurantGroupSupplier->getRating($restaurantName);
         // restaurant's data
         $dataForClient["restaurantBranches"] = $restaurantGroupSupplier->getRestaurantBranches($restaurantName);
+
+        $dataForClient["user"] = $userDataComposer->composeData();
 
         return $this->render('restaurant_group/index.html.twig', $dataForClient);
     }
@@ -67,13 +74,17 @@ class RestaurantGroupController extends AbstractController
         return $response;
     }
 
-    public function search(SearchFlowInterface $flow, BaseLayoutSupplierInterface $baseLayoutSupplier, Request $request)
+    public function search(SearchFlowInterface $flow,
+                           BaseLayoutSupplierInterface $baseLayoutSupplier,
+                           UserDataComposerInterface $userDataComposer,
+                           Request $request)
     {
         $dataForClient = $this->getDataForClient($baseLayoutSupplier);
         $notReservedTables = $flow->getNotReservedTables();
 
         $dataForClient["notReservedTables"] = $notReservedTables;
         $dataForClient["queryParams"] = $request->query->all();
+        $dataForClient["user"] = $userDataComposer->composeData();
 
         return $this->render("concrete_restaurant_reservation/index.html.twig", $dataForClient);
     }
