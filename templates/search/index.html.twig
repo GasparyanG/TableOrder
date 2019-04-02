@@ -36,7 +36,7 @@
                     <div class="card">
                         <img class="card-img-top" alt={{ currentRestaurant.restaurant.name }} src={{ "/photo/restaurant/cover-photo/" ~ currentRestaurant.restaurant.coverPhoto }}>
                         <div class="card-body">
-                            <h3 class="card-title">{{ currentRestaurant.restaurant.name }}</h3>
+                            <a href={{ "/restaurants/" ~ currentRestaurant.restaurant.name }}><h3 class="card-title">{{ currentRestaurant.restaurant.name }}</h3></a>
                             <div class="card-text">
                                 <span class="text-muted">Rating</span> <i class="far fa-star"></i> {{ currentRestaurant.rating }}
                             </div>
