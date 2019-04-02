@@ -33,4 +33,24 @@ class KeysFetcher implements KeysFetcherInterface
     {
         return $this->keysConfig["restaurant"]["restaurant"];
     }
+
+    public function getPersonAmount(): string
+    {
+        return $this->keysConfig["table"]["personAmount"];
+    }
+
+    public function getTableId(): string
+    {
+        return $this->keysConfig["table"]["tableId"];
+    }
+
+    public function getReservationTime(): string
+    {
+        return $this->keysConfig["reservation"]["reservationTime"];
+    }
+
+    public function getReservationDate(): string
+    {
+        return $this->keysConfig["reservation"]["reservationDate"];
+    }
 }

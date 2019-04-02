@@ -3,3 +3,11 @@ restaurant:
   rating: 'rating'
   bookmark: 'bookmark'
   restaurant: 'restaurant'
+
+reservation:
+  reservationDate: 'reservationDate'
+  reservationTime: 'reservationTime'
+
+table:
+  personAmount: 'personAmount'
+  tableId: 'tableId'
