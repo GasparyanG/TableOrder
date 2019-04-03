@@ -1,115 +1,141 @@
 {% extends 'base.html.twig' %}
-{#
-    - [x] make review dynamic (1)
-    - [x] prev, next reservation date and time (2)
-#}
-{% block title %}Hello ReservationController!{% endblock %}
+
+{% block title %}Reservation{% endblock %}
 
 {% block body %}
-    {% if success %}
-        <div class="row mt-4 mb-4 ">
-            <div class="bg-success text-center p-1 rounded col-md-10">
-                <h3>Congratulations, Your Reservation is Done!</h3>
-            </div>
-            <div class="col-md-2">
-                <a href="/home" class="btn btn-lg btn-outline-success">Go To Home</a>
-            </div>
-        </div>
-    {% endif %}
-    {% if rightDuration %}
-        <div class="bg-danger p-2 mt-4 mb-4 text-center">
-            <h5>
-                You can reserve this table only for <span class="text-light">{{ rightDuration|date("i") }}</span> minutes
-            </h5>
-        </div>
-    {% endif %}
-    {% if errors %}
-        <div class="mt-4 mb-4">
-        {% for errorMsg in errors %}
-            <div class="bg-danger text-center mt-3">
-               errorMsg
-            </div>
-        {% endfor %}
-        </div>
-    {% endif %}
-    {% if error %}
-        <h1 class="alert-danger">
-            Sth went wrong please try again
-        </h1>
-    {% endif %}
-    <div class="mt-4">
-        <div class="card">
-            <div class="row">
-                <div class="col-md-6">
-                    <img src={{ "/photo/restaurant/cover-photo/" ~ reservation.restauran.coverPhoto }} class="card-img-top" alt="">
-                </div>
-                <div class="col-md-6">
-                    <h1 class="card-title">
-                        {{ reservation.restauran.name }}
-                    </h1>
-                    {# review is needed #}
-                    <h3 class="card-subtitle">
-                        location: <span class="text-muted">{{ reservation.restauran.location }}</span>
-                    </h3>
-                    <h4>
-                        {# 1 #}
-                        {% if review %}
-                            Review: <span class="text-muted"><i class="far fa-star"></i> {{ review }}</span>
-                        {% else %}
-                             Review: <span class="text-muted"><i class="far fa-star"></i> No Review</span>
-                        {% endif %}
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="list-group list-group-flush col-md-6">
-                <div class="list-group-item">
-                    <h5><i class="fas fa-female"></i> <span class="text-muted">Person Amount</span> {{ reservation.table.personAmount }}</h5>
-                </div>
-                <div class="list-group-item">
-                    <h5><i class="far fa-clock"></i> <span class="text-muted">Reservation Time</span> {{ reservation.reservationTime|date("H:i:s") }}</h5>
-                </div>
-                <div class="list-group-item">
-                    <h5><i class="far fa-calendar-alt"></i> <span class="text-muted">Reservation Date</span> {{ reservation.reservationDate|date("Y-m-d") }}</h5>
-                </div>
-            </div>
-            {# 2 #}
-            <div class="list-group list-group-flush col-md-6">
-                <div class="list-group-item">
-                    <h5><i class="fas fa-hashtag"></i> <span class="text-muted">Table Number</span> {{ reservation.table.tableNumber }}</h5>
-                </div>
-                {# previous reservation #}
-                {% if prevReservation %}
-                    <div class="list-group-item">
-                        <h5><i class="fas fa-backward"></i> <span class="text-muted">Previous Reservation</span> {{ prevReservation.reservationTime|date("H:i:s") }}</h5>
-                    </div>
-                 {% else %}
-                    <div class="list-group-item">
-                        <h5><i class="fas fa-backward"></i> <span class="text-muted">Previous Reservation</span> Not Reserved Yet</h5>
-                    </div>
-                {% endif %}
+    {% if valid %}
+        <div>
+            <h1 class="text-center text-muted mb-4"> {{ restaurantData.restaurant.name }} </h1>
 
-                {# next reservation #}
-                {% if nextReservation %}
-                    <div class="list-group-item">
-                        <h5><i class="fas fa-forward"></i> <span class="text-muted">Next Reservation</span> {{ nextReservation.reservationTime|date("H:i:s") }}</h5>
-                    </div>
-                {% else %}
-                    <div class="list-group-item">
-                        <h5><i class="fas fa-forward"></i> <span class="text-muted">Next Reservation</span> Not Reserved Yet</h5>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-        <form action="" method ="POST">
-            <div class="input-group mt-4">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Duration in minutes</span>
+            <div id="restaurant-for-reservation">
+                <div>
+                    <img src={{ "/photo/restaurant/cover-photo/" ~ restaurantData.restaurant.coverPhoto }} alt={{ restaurantData.restaurant.name }}>
                 </div>
-                <input type="input" class="form-control" placeholder="e.g. 60, 120, etc." name ="amountOfTime">
+                <div class="pl-4">
+                    <div>
+                        <h3 class="text-muted">{{ restaurantData.restaurant.slogan }}</h3>
+                    </div>
+
+                    <div>
+                        <span><i class="far fa-star"></i> <span class="text-muted">Rating</span> {{ restaurantData.rating }}</span>
+                    </div>
+
+                    <div>
+                        <span><i class="fas fa-map-marker-alt"></i> <span class="text-muted">Location</span> {{ restaurantData.restaurant.location }} </span>
+                    </div>
+
+                    {# this need to be dynamic #}
+                    <div>
+                        <i class="fas fa-phone"></i> <span class="text-muted">Phone</span> Some fake phone number until opening
+                    </div>
+
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Reserve This Table</button>
-        </form>
-    </div>
+
+
+            <div id="reservation-details">
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="text-center text-muted">Reservation Details</h5>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <i class="far fa-calendar-check"></i>
+                                <span class="text-muted">Reservation date and time </span>
+                                {{ reservationDetails.reservationDate }} {{ reservationDetails.reservationTime }}
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="fas fa-hashtag"></i>
+                                <span class="text-muted">Table number</span>
+                                {{ tableToReserve.tableNumber }}
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="fas fa-user-friends"></i>
+                                <span class="text-muted">Person amount</span>
+                                {{ tableToReserve.personAmount }}
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="col-6">
+                        <div class="history">
+
+                            <h5 class="text-center text-muted"> Table reservation state </h5>
+                            <ul class="list-group list-group-flush">
+                            {% if previousReservation %}
+                                <li class="list-group-item">
+                                    <div><i class="fas fa-calendar-times"></i> {{ previousReservation.reservationDate.format("Y-m-d") }} {{ previousReservation.reservationTime.format("H:i:s") }} </div>
+                                </li>
+                            {% else %}
+                                <li class="list-group-item">
+                                    <div><i class="fas fa-calendar-times"></i> No previous reservation</div>
+                                </li>
+                            {% endif %}
+                            {% if nextReservation %}
+                                <li class="list-group-item">
+                                    <div><i class="fas fa-calendar-times"></i> {{ nextReservation.reservationDate.format("Y-m-d") }} {{ nextReservation.reservationTime.format("H:i:s") }} </div>
+                                </li>
+                            {% else %}
+                                <li class="list-group-item">
+                                    <div><i class="fas fa-calendar-times"></i> No next reservation</div>
+                                </li>
+                            {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="reservation-submission">
+
+                <div class="row">
+                    <div class="errors col-6">
+                        {% for error in errors %}
+                            <div class="alert alert-danger mt-2 mb-2 text-center">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-6">
+
+                        <h4 class="text-muted text-center">Make Reservation</h4>
+
+                        <form action="" method="POST">
+                            <div class="input-group">
+
+                                <div class="input-group-prepend mr-2">
+                                </div>
+
+                                <input id="amountOfTime" type="input" class="form-control" name="amountOfTime" placeholder="amount of time in minutes">
+
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary">Reserve</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    {% else %}
+        <div class="alert alert-danger">
+            Sth went wrong please try again
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/reservation/restaurant.css">
 {% endblock %}

@@ -1,0 +1,20 @@
+#restaurant-for-reservation
+{
+    display: flex;
+}
+
+#restaurant-for-reservation img
+{
+    width: 400px;
+}
+
+#reservation-details
+{
+    margin-top: 2rem;
+}
+
+
+#reservation-submission
+{
+    margin-left: 25%;
+}
