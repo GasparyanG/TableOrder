@@ -5,6 +5,7 @@ search:
 
 reservation:
   tableId: 'tableId is missing'
+  amountOfTime: "This table don't have that much of time to be reserved"
 
 email:
   wrong_format: 'Given email address has wrong format'
