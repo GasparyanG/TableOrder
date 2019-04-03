@@ -6,6 +6,7 @@ use App\Entity\Restaurant;
 use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\ConfigurationFetcher\Keys\KeysFetcherInterface;
 use App\Service\DatabaseHighLvlManipulation\Insertion\Reservation\ReservationInsertionInterface;
+use App\Service\Mailer\MailerInterface;
 use App\Service\Reservation\ReservationSupplier\ReservationSupplierInterface;
 use App\Service\Reservation\Validation\ReservationValidationInterface;
 use App\Service\Restaurant\RestaurantData\SingleRestaurantDataPreparingInterface;
@@ -26,6 +27,7 @@ class ReservationController extends AbstractController
     private $reservationSupplier;
     private $singleRestaurantDataPreparing;
     private $reservationInserter;
+    private $mailer;
 
     // db
     private $em;
@@ -40,7 +42,8 @@ class ReservationController extends AbstractController
                                 ReservationSupplierInterface $reservationSupplier,
                                 RegistryInterface $registry,
                                 ReservationInsertionInterface $reservationInserter,
-                                SingleRestaurantDataPreparingInterface $singleRestaurantDataPreparing)
+                                SingleRestaurantDataPreparingInterface $singleRestaurantDataPreparing,
+                                MailerInterface $mailer)
     {
         $this->clientDataComposer = $clientDataComposer;
         $this->userSupporter = $userSupporter;
@@ -50,6 +53,7 @@ class ReservationController extends AbstractController
         $this->reservationSupplier = $reservationSupplier;
         $this->singleRestaurantDataPreparing = $singleRestaurantDataPreparing;
         $this->reservationInserter = $reservationInserter;
+        $this->mailer = $mailer;
 
         // db
         $this->em = $registry->getEntityManager();
@@ -103,6 +107,9 @@ class ReservationController extends AbstractController
         elseif (count($errors) == 0) {
             $reservation = $this->reservationInserter->getPopulatedObject($restaurantName, $restaurantId);
             $this->reservationInserter->insertIntoDatabase($reservation);
+
+            // send email
+            $this->mailer->sendReservationDetailsToUser($reservation);
 
             return $this->redirectToRoute("dashboard");
         }
