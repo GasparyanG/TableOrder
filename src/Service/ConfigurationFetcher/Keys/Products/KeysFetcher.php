@@ -53,4 +53,9 @@ class KeysFetcher implements KeysFetcherInterface
     {
         return $this->keysConfig["reservation"]["reservationDate"];
     }
+
+    public function getAmountOfTime(): string
+    {
+        return $this->keysConfig["reservation"]["amountOfTime"];
+    }
 }

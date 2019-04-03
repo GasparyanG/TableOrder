@@ -19,4 +19,6 @@ interface KeysFetcherInterface
     public function getReservationTime(): string;
 
     public function getReservationDate(): string;
+
+    public function getAmountOfTime(): string;
 }
