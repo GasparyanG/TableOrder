@@ -39,17 +39,6 @@ App\Service\Search\Products\ObjectsForValidation\RestaurantGroupValidatorObject:
     location:
       - NotBlank: ~
 
-App\Entity\Reservation:
-  properties:
-    reservationTime:
-      - NotBlank: ~
-    reservationDate:
-      - NotBlank: ~
-    amountOfTime:
-      - NotBlank: ~
-      - Type: integer
-
-
  # USER
 
 App\Service\Security\Authentication\Validation\Objects\User\SignUpUser:
@@ -99,3 +88,17 @@ App\Service\Security\Validation\Objects\Reservation:
 
     reservationDate:
       - NotBlank: {message: "reservation date should not be blank"}
+
+
+# entity validation
+App\Entity\Reservation:
+  properties:
+    reservationTime:
+      - NotBlank: ~
+
+    reservationDate:
+      - NotBlank: ~
+
+    amountOfTime:
+      - NotBlank: {message: "amount of time should not be blank"}
+      - Type: {type: int, message: "Amount of time should be an integer"}

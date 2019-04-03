@@ -119,7 +119,7 @@ class Reservation
         return $this->amountOfTime;
     }
 
-    public function setAmountOfTime(int $amountOfTime): self
+    public function setAmountOfTime($amountOfTime): self
     {
         $this->amountOfTime = $amountOfTime;
 
