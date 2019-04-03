@@ -2,12 +2,16 @@
 
 namespace App\Service\Reservation\Validation\Products;
 
+use App\Service\ConfigurationFetcher\Errors\ErrorFetcherInterface;
 use App\Service\ConfigurationFetcher\Keys\KeysFetcherInterface;
+use App\Service\DatabaseHighLvlManipulation\Insertion\Reservation\ReservationInsertionInterface;
 use App\Service\Existence\Entity\ExistenceHandlerInterface;
 use App\Service\Existence\Entity\Products\ExistenceHandler;
+use App\Service\Reservation\AmountOfTimeChecker\AmountOfTimeCheckerInterface;
 use App\Service\Reservation\Time\ReservationTimeAndDateGuruInterface;
 use App\Service\Reservation\Validation\ReservationValidationInterface;
 use App\Service\Reservation\Validation\QueryParams\ReservationQueryParamValidatorInterface;
+use App\Service\Security\Authentication\Validation\Supplier\ValidationSupplierInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,6 +20,7 @@ use App\Entity\Reservation;
 
 // DEV
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ReservationValidation implements ReservationValidationInterface
 {
@@ -24,6 +29,11 @@ class ReservationValidation implements ReservationValidationInterface
     private $reservationTimeAndDateGuru;
     private $existenceHandler;
     private $keysFetcher;
+    private $reservationInserte;
+    private $validator;
+    private $validationSupplier;
+    private $amountOfTimeChecker;
+    private $errorFetcher;
 
     // db
     private $em;
@@ -37,6 +47,11 @@ class ReservationValidation implements ReservationValidationInterface
                                 ExistenceHandlerInterface $existenceHandler,
                                 KeysFetcherInterface $keysFetcher,
                                 RegistryInterface $registry,
+                                ValidatorInterface $validator,
+                                ValidationSupplierInterface $validationSupplier,
+                                ReservationInsertionInterface $reservationInserte,
+                                AmountOfTimeCheckerInterface $amountOfTimeChecker,
+                                ErrorFetcherInterface $errorFetcher,
                                 LoggerInterface $logger)
     {
         $this->request = Request::createFromGlobals();
@@ -44,6 +59,11 @@ class ReservationValidation implements ReservationValidationInterface
         $this->reservationTimeAndDateGuru = $reservationTimeAndDateGuru;
         $this->existenceHandler = $existenceHandler;
         $this->keysFetcher = $keysFetcher;
+        $this->reservationInserte = $reservationInserte;
+        $this->validator = $validator;
+        $this->validationSupplier = $validationSupplier;
+        $this->amountOfTimeChecker = $amountOfTimeChecker;
+        $this->errorFetcher = $errorFetcher;
 
         // db
         $this->em = $registry->getEntityManager();
@@ -90,6 +110,24 @@ class ReservationValidation implements ReservationValidationInterface
         return true;
     }
 
+    public function postRequestValidation(string $restaurantName, int $restaurantId): ?array
+    {
+        if (!$this->getRequestIsValid($restaurantName, $restaurantId)) {
+            // sth went wrong: to see what it is checkout 'getRequestIsValid' method
+            return null;
+        }
+
+        $reservation = $this->reservationInserte->getPopulatedObject($restaurantName, $restaurantId);
+        $errors = $this->validator->validate($reservation);
+
+        if (count($errors) > 0) {
+            return $this->validationSupplier->convertErrorsToArray($errors);
+        }
+
+        // check logic of reservation!
+        return $this->getLogicErrors($reservation);
+    }
+
     private function tableIsFree(): bool
     {
         $queryParams = $this->request->query->all();
@@ -108,5 +146,18 @@ class ReservationValidation implements ReservationValidationInterface
         }
 
         return true;
+    }
+
+    private function getLogicErrors(Reservation $reservation): array
+    {
+        $errors = [];
+
+        $amountOfTime = $this->amountOfTimeChecker->checkAmountOfTime($reservation);
+
+        if (!$amountOfTime) {
+            $errors[] = $this->errorFetcher->getAmountOfTIme();
+        }
+
+        return $errors;
     }
 }
