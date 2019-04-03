@@ -11,7 +11,7 @@
 
         <div class="Reservation">
             <h4>Reservation</h4>
-            <span>Time And Date: </span> <?= $reservation->getReservationTime()->format("H:i:s") . " " . $reservation->getReservationTime()->format("Y-m-d") ?>
+            <span>Time And Date: </span> <?= $reservation->getReservationTime()->format("H:i:s") . " " . $reservation->getReservationDate()->format("Y-m-d") ?>
 
             <br>
             <span>Amount of Time: </span> <?= $reservation->getAmountOfTime() . " minutes"?>
