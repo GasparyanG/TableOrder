@@ -56,14 +56,13 @@ search:
   path: /search
   controller: App\Controller\SearchController::getResult
 
-#reservation:
-#  path: /reservation
-#  controller: App\Controller\ReservationController::reserve
-
 home_page:
   path: /home
   controller: App\Controller\HomeController::getPage
 
+
+
+# RESERVATION
 reservation:
   path: /restaurants/{restaurantName}/{restaurantId}/reservation
   controller: App\Controller\ReservationController::getPage
@@ -73,6 +72,7 @@ make_reservation:
   path: /restaurants/{restaurantName}/{restaurantId}/reservation
   controller: App\Controller\ReservationController::reserve
   methods: [POST]
+
 
 # concrete restaurant portion
 restaurant:

@@ -1,156 +1,154 @@
 <?php
 
-/**
- * - [] find out how to display 404 page
- * ::reserve
- * - [x] add timeAmount to session and then pass session array to checker
- * - [x] add person amount and location to twig
- * - [] user need to be authenticated to make reservation otherwise he/she need to be redirected to registration page
- * primary
- * - [x] see notebook to decide which data is need to send to client side
- */
-
-
-
 namespace App\Controller;
 
-use App\Service\Reservation\ReservationSupplier\Products\ReservationSupplier;
-use App\Service\User\Data\Composed\UserDataComposerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use App\Entity\RestaurantTable;
-use App\Entity\Reservation;
 use App\Entity\Restaurant;
-use App\Entity\User;
-use App\Service\ClientSideGuru\DefaultErrors\DefaultErrorMessageFetcherInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Response;
-use App\Form\Search\Interfaces\SearchFormInterface;
-use App\Service\Restaurant\RestaurantSupplierInterface;
+use App\Service\BaseLayout\ClientDataComposerInterface;
+use App\Service\ConfigurationFetcher\Keys\KeysFetcherInterface;
+use App\Service\DatabaseHighLvlManipulation\Insertion\Reservation\ReservationInsertionInterface;
 use App\Service\Reservation\ReservationSupplier\ReservationSupplierInterface;
+use App\Service\Reservation\Validation\ReservationValidationInterface;
+use App\Service\Restaurant\RestaurantData\SingleRestaurantDataPreparingInterface;
+use App\Service\User\UserSupporterInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
-// new imp: bridge pattern approach
-use App\Service\Reservation\Bridge\ReservationBridgeInterface;
-use App\Service\Reservation\PostBridge\PostReservationBridgeInterface;
+use App\Entity\RestaurantTable;
 
 class ReservationController extends AbstractController
 {
-    public function __construct(DefaultErrorMessageFetcherInterface $defaultErrorMessageFetcher)
+    private $clientDataComposer;
+    private $userSupporter;
+    private $reservationValidation;
+    private $request;
+    private $keysFetcher;
+    private $reservationSupplier;
+    private $singleRestaurantDataPreparing;
+    private $reservationInserter;
+
+    // db
+    private $em;
+    private $restaurantRepo;
+    private $restaurantTableRepo;
+
+
+    public function __construct(ClientDataComposerInterface $clientDataComposer,
+                                UserSupporterInterface $userSupporter,
+                                ReservationValidationInterface $reservationValidation,
+                                KeysFetcherInterface $keysFetcher,
+                                ReservationSupplierInterface $reservationSupplier,
+                                RegistryInterface $registry,
+                                ReservationInsertionInterface $reservationInserter,
+                                SingleRestaurantDataPreparingInterface $singleRestaurantDataPreparing)
     {
-        $this->defaultErrorMessageFetcher = $defaultErrorMessageFetcher;
+        $this->clientDataComposer = $clientDataComposer;
+        $this->userSupporter = $userSupporter;
+        $this->reservationValidation = $reservationValidation;
+        $this->request = Request::createFromGlobals();
+        $this->keysFetcher = $keysFetcher;
+        $this->reservationSupplier = $reservationSupplier;
+        $this->singleRestaurantDataPreparing = $singleRestaurantDataPreparing;
+        $this->reservationInserter = $reservationInserter;
+
+        // db
+        $this->em = $registry->getEntityManager();
+        $this->restaurantRepo = $this->em->getRepository(Restaurant::class);
+        $this->restaurantTableRepo = $this->em->getRepository(RestaurantTable::class);
     }
 
-    public function getPage(Request $request,
-                            LoggerInterface $logger,
-                            ReservationBridgeInterface $reservationBridge,
-                            $restaurantName, $restaurantId,
-                            SearchFormInterface $formHelper,
-                            RestaurantSupplierInterface $restaurantSupplier,
-                            UserDataComposerInterface $userDataComposer,
-                            ReservationSupplierInterface $reservationSupplier)
+    public function getPage(string $restaurantName, int $restaurantId)
     {
-        // this section need to be changed to obey DRY principle
-        $arrayOfData = $this->getCommonDataForClient($formHelper);
-        $reservation = $reservationBridge->prepareReservationWithoutAmountOfTime();
-        $arrayOfData["reservation"] = $reservation;
-
-        $arrayOfData["user"] = $userDataComposer->composeData();
-
-        // next, previous reservations
-        $arrayOfData["prevReservation"] = $reservationSupplier->getPreviousReservation($reservation->getReservationTime()->format("H:i:s"), $reservation->getReservationDate()->format("Y-m-d"), $reservation->getTable());
-        $arrayOfData["nextReservation"] = $reservationSupplier->getNextReservation($reservation->getReservationTime()->format("H:i:s"), $reservation->getReservationDate()->format("Y-m-d"), $reservation->getTable());
-
-        $arrayOfData["review"] = $restaurantSupplier->getRestaurantGroupReview($reservation->getRestauran()->getName());
-
-        $queryParams = $request->query->all();
-
-        if (!$reservationBridge->restaurantExists($restaurantName, $restaurantId)) {
-            // throw $this->createNotFoundException('The product does not exist');
-            $arrayOfData["error"] = true;
-            $this->render("reservation\index.html.twig", $arrayOfData);
+        // only authenticated user can make reservation !
+        if (!$this->userSupporter->getUser()) {
+            return $this->redirectToRoute("sign_up");
         }
 
-        $tableId = $reservationBridge->getRestaurantTableId($queryParams);
-        if (!$tableId) {
-            $arrayOfData["error"] = true;
-            $this->render("reservation\index.html.twig", $arrayOfData);
+        // checking query string validity
+        $valid = $this->reservationValidation->getRequestIsValid($restaurantName, $restaurantId);
+
+        if ($valid) {
+            $clientData = $this->getClientData($restaurantId);
         }
 
-        // table exists
         else {
-            if ($reservationBridge->tableExists($tableId, $restaurantId)) {
-                $accessGranted = true;
-            }
-
-            else {
-                $arrayOfData["error"] = true;
-                $this->render("reservation\index.html.twig", $arrayOfData);
-            }
+            $clientData = $this->clientDataComposer->composeData();
         }
 
-        // setting session: at this point it just remains (for session setting) to pass queryParams to setter
-        $reservationBridge->replace($queryParams);
+        $clientData["valid"] = $valid;
 
-        // render this if above validation is passed
-        return $this->render("reservation/index.html.twig", $arrayOfData);
+        return $this->render("reservation/index.html.twig", $clientData);
     }
 
-    public function reserve(PostReservationBridgeInterface $postReservationBridge,
-                            SearchFormInterface $formHelper,
-                            RestaurantSupplierInterface $restaurantSupplier,
-                            UserDataComposerInterface $userDataComposer,
-                            ReservationSupplierInterface $reservationSupplier)
+
+    public function reserve(string $restaurantName, int $restaurantId)
     {
-        // this section is being repeated
-        $arrayOfData = $this->getCommonDataForClient($formHelper);
-
-        $reservation = $postReservationBridge->prepareReservation();
-        $arrayOfData["reservation"] = $reservation;
-
-        $arrayOfData["user"] = $userDataComposer->composeData();
-
-        // next and prev reservations
-        $arrayOfData["prevReservation"] = $reservationSupplier->getPreviousReservation($reservation->getReservationTime()->format("H:i:s"), $reservation->getReservationDate()->format("Y-m-d"), $reservation->getTable());
-        $arrayOfData["nextReservation"] = $reservationSupplier->getNextReservation($reservation->getReservationTime()->format("H:i:s"), $reservation->getReservationDate()->format("Y-m-d"), $reservation->getTable());
-
-        // review
-        $arrayOfData["review"] = $restaurantSupplier->getRestaurantGroupReview($reservation->getRestauran()->getName());
-
-        $errors = $postReservationBridge->checkReservation($reservation);
-        $arrayOfData["errors"] = $errors;
-
-        // show errors
-        if (count($errors) > 0) {
-            return $this->render("reservation\index.html.twig", $arrayOfData);
+        // only authenticated user can make reservation !
+        if (!$this->userSupporter->getUser()) {
+            return $this->redirectToRoute("sign_up");
         }
 
-        // continue validating
-        if (!$postReservationBridge->checkAmountOfTime($reservation)) {
-            $validAmountOfTime = $postReservationBridge->getValidAmountOfTime($reservation);
-            $arrayOfData['rightDuration'] = $validAmountOfTime;
-            return $this->render("reservation\index.html.twig", $arrayOfData);
+        // request flow will change this to false if required
+        $valid = true;
+
+        // check post request and return errors if any
+        $errors = $this->reservationValidation->postRequestValidation($restaurantName, $restaurantId);
+
+        // this will happen if 'get' request is wrong!
+        if ($errors === null) {
+            $valid = false;
         }
 
-        // make database record after validation
-        $postReservationBridge->saveReservation($reservation);
-        $arrayOfData["success"] = true;
-        return $this->render("reservation\index.html.twig", $arrayOfData);
+        // insert $reservation to database and redirect
+        elseif (count($errors) == 0) {
+            $reservation = $this->reservationInserter->getPopulatedObject($restaurantName, $restaurantId);
+            $this->reservationInserter->insertIntoDatabase($reservation);
+
+            return $this->redirectToRoute("dashboard");
+        }
+
+        if ($valid) {
+            $clientData = $this->getClientData($restaurantId);
+        }
+
+        else {
+            $clientData = $this->clientDataComposer->composeData();
+        }
+
+        $clientData["valid"] = $valid;
+
+        // send errors to client
+        $clientData["errors"] = $errors;
+
+        return $this->render("reservation/index.html.twig", $clientData);
     }
 
-    private function getCommonDataForClient($formHelper): array
-    {
-        $arrayOfData = [];
-        $arrayOfData["cities"] = $formHelper->getLocationsForChoiceType();
-        $arrayOfData["arrayOfPersonAmounts"] = $formHelper->getPersonAmountArray();
-        $arrayOfData["errors"] = [];
-        $arrayOfData["error"] = false;
-        // right amount of time to reserve given table
-        $arrayOfData["rightDuration"] = false;
-        $arrayOfData["success"] = false;
 
-        return $arrayOfData;
+    private function getClientData(int $restaurantId): array
+    {
+        $clientData = $this->clientDataComposer->composeData();
+
+        // errors
+        $clientData["errors"] = [];
+
+        $queryParams = $this->request->query->all();
+
+        // add previous and next reservations
+        $reservationTime = $queryParams[$this->keysFetcher->getReservationTime()];
+        $reservationDate = $queryParams[$this->keysFetcher->getReservationDate()];
+        $tableId = $queryParams[$this->keysFetcher->getTableId()];
+
+        $clientData["reservationDetails"] = $queryParams;
+
+        $clientData["nextReservation"] = $this->reservationSupplier->getNextReservation($reservationTime, $reservationDate, $tableId);
+        $clientData["previousReservation"] = $this->reservationSupplier->getPreviousReservation($reservationTime, $reservationDate, $tableId);
+
+        $clientData["tableToReserve"] = $this->restaurantTableRepo->find($tableId);
+
+        // add restaurant data
+        $restaurant = $this->restaurantRepo->find($restaurantId);
+        $clientData["restaurantData"] = $this->singleRestaurantDataPreparing->populateRestaurant($restaurant);
+
+        return $clientData;
     }
 }
