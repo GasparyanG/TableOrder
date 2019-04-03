@@ -6,6 +6,7 @@ use App\Service\Mailer\Authentication\Verification\VerificationMailerInterface;
 use App\Service\Mailer\Common\Products\MailerSupplier;
 use App\Service\ConfigurationFetcher\Specific\SpecificConfigFetcherInterface;
 use App\Service\Mailer\DataPreparing\DataPreparingInterface;
+use App\Service\User\UserSupporterInterface;
 use App\Templating\Configuration\ConfiguredTemplateEngine;
 
 class VerificationMailer extends MailerSupplier implements VerificationMailerInterface
@@ -13,9 +14,9 @@ class VerificationMailer extends MailerSupplier implements VerificationMailerInt
     private $engine;
     private $dataPreparingEngine;
 
-    public function __construct(SpecificConfigFetcherInterface $specificConfigFetcher, ConfiguredTemplateEngine $engine, DataPreparingInterface $dataPreparingEngine)
+    public function __construct(SpecificConfigFetcherInterface $specificConfigFetcher, ConfiguredTemplateEngine $engine, DataPreparingInterface $dataPreparingEngine, UserSupporterInterface $userSupporter)
     {
-        parent::__construct($specificConfigFetcher);
+        parent::__construct($specificConfigFetcher, $userSupporter);
 
         $this->engine = $engine;
         $this->dataPreparingEngine = $dataPreparingEngine;
