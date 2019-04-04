@@ -7,6 +7,7 @@ use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\ConfigurationFetcher\Keys\KeysFetcherInterface;
 use App\Service\DatabaseHighLvlManipulation\Insertion\Reservation\ReservationInsertionInterface;
 use App\Service\Mailer\MailerInterface;
+use App\Service\NotificationCenter\Notifier\NotifierInterface;
 use App\Service\Reservation\ReservationSupplier\ReservationSupplierInterface;
 use App\Service\Reservation\Validation\ReservationValidationInterface;
 use App\Service\Restaurant\RestaurantData\SingleRestaurantDataPreparingInterface;
@@ -28,6 +29,7 @@ class ReservationController extends AbstractController
     private $singleRestaurantDataPreparing;
     private $reservationInserter;
     private $mailer;
+    private $notifier;
 
     // db
     private $em;
@@ -43,7 +45,8 @@ class ReservationController extends AbstractController
                                 RegistryInterface $registry,
                                 ReservationInsertionInterface $reservationInserter,
                                 SingleRestaurantDataPreparingInterface $singleRestaurantDataPreparing,
-                                MailerInterface $mailer)
+                                MailerInterface $mailer,
+                                NotifierInterface $notifier)
     {
         $this->clientDataComposer = $clientDataComposer;
         $this->userSupporter = $userSupporter;
@@ -54,6 +57,7 @@ class ReservationController extends AbstractController
         $this->singleRestaurantDataPreparing = $singleRestaurantDataPreparing;
         $this->reservationInserter = $reservationInserter;
         $this->mailer = $mailer;
+        $this->notifier = $notifier;
 
         // db
         $this->em = $registry->getEntityManager();
@@ -108,8 +112,12 @@ class ReservationController extends AbstractController
             $reservation = $this->reservationInserter->getPopulatedObject($restaurantName, $restaurantId);
             $this->reservationInserter->insertIntoDatabase($reservation);
 
-            // send email
+            // notify user about reservation
+            // email
             $this->mailer->sendReservationDetailsToUser($reservation);
+
+            // app notifications
+            $this->notifier->notify($reservation);
 
             return $this->redirectToRoute("dashboard");
         }
