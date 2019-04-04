@@ -7,6 +7,7 @@ use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\ConfigurationFetcher\Templating\TemplatingConfigFetcherInterface;
 
 // DEV
+use App\Service\NotificationCenter\Preparing\NotificationPreparingInterface;
 use App\Service\User\Data\Composed\UserDataComposerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -20,11 +21,13 @@ class ClientDataComposer implements ClientDataComposerInterface
     protected $baseLayoutSupplier;
     protected $clientRequiredData;
     protected $userDataComposer;
+    protected $notificationPreparing;
 
     public function __construct(BaseLayoutSupplierInterface $baseLayoutSupplier,
                                 TemplatingConfigFetcherInterface $templatingConfigFetcher,
                                 LoggerInterface $logger,
-                                UserDataComposerInterface $userDataComposer)
+                                UserDataComposerInterface $userDataComposer,
+                                NotificationPreparingInterface $notificationPreparing)
     {
         // hero of this class
         $this->clientRequiredData = [];
@@ -32,6 +35,7 @@ class ClientDataComposer implements ClientDataComposerInterface
         $this->templatingConfigFetcher = $templatingConfigFetcher;
         $this->baseLayoutSupplier = $baseLayoutSupplier;
         $this->userDataComposer = $userDataComposer;
+        $this->notificationPreparing = $notificationPreparing;
 
         // DEV
         $this->logger = $logger;
@@ -42,6 +46,7 @@ class ClientDataComposer implements ClientDataComposerInterface
         $this->addPersonAmount();
         $this->addCities();
         $this->addUser();
+        $this->addNotificationsData();
         // some methods can be abstractly defined and called here: successors of this class will override them.
 
         return $this->clientRequiredData;
@@ -66,5 +71,13 @@ class ClientDataComposer implements ClientDataComposerInterface
         $userKey = $this->templatingConfigFetcher->getUser();
 
         $this->clientRequiredData[$userKey] = $this->userDataComposer->composeData();
+    }
+
+    protected function addNotificationsData(): void
+    {
+        $notificationDataKey = $this->templatingConfigFetcher->getNotificationData();
+
+        $notificationsData = $this->notificationPreparing->getNotifications();
+        $this->clientRequiredData[$notificationDataKey] = $notificationsData;
     }
 }
