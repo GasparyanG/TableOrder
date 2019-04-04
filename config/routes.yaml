@@ -39,6 +39,10 @@ rating:
  path: /restaurants/{restaurantId}/rating
  controller: App\Controller\RatingController::addRating
 
+notification_removing:
+  path: /me/notifications/delete
+  controller: App\Controller\NotificationController::deleteAll
+
 
 user_page:
   path: /users/{user_id}
