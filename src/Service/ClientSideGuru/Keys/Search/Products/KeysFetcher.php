@@ -41,4 +41,14 @@ class KeysFetcher implements KeysFetcherInterface
     {
         return $this->keysConf['search']['reservationDate'];
     }
+
+    public function getNotifications(): string
+    {
+        return $this->keysConf['notification']['notifications'];
+    }
+
+    public function getAmountOfNotifications(): string
+    {
+        return $this->keysConf['notification']['amountOfNotifications'];
+    }
 }

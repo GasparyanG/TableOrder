@@ -13,3 +13,7 @@ reservation:
 
 postArray:
   reviewValue: 'reviewValue'
+
+notification:
+  notifications: 'notifications'
+  amountOfNotifications: 'amountOfNotifications'

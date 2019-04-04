@@ -15,4 +15,8 @@ interface KeysFetcherInterface
     public function getRestaurantId(): string;
     
     public function getReservationDate(): string;
+
+    public function getNotifications(): string;
+
+    public function getAmountOfNotifications(): string;
 }

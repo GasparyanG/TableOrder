@@ -50,4 +50,9 @@ class TemplatingConfigFetcher implements TemplatingConfigFetcherInterface
     {
         return $this->templateVarsConfig["rating"]['restaurantRating'];
     }
+
+    public function getNotificationData(): string
+    {
+        return $this->templateVarsConfig["notification"]['notificationData'];
+    }
 }
