@@ -29,23 +29,26 @@
                     <div class="modal-body">
 
                         {% if notificationData.amountOfNotifications > 0 %}
-                            {% for index, notification in notificationData.notifications %}
+                            <div id="displayed-notifications">
+                                {% for index, notification in notificationData.notifications %}
 
-                                {# separate notifications #}
-                                {% if index > 0 %}
-                                    <hr>
-                                {% endif %}
+                                    {# separate notifications #}
+                                    {% if index > 0 %}
+                                        <hr>
+                                    {% endif %}
 
-                                <div class="row">
-                                    <div class="col-9">
-                                        <span class="text-muted">{{ notification.message }}</span>
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <span class="text-muted">{{ notification.message }}</span>
+                                        </div>
+                                        <div class="col-3">
+                                            <small>{{ notification.time|date("H:i") }}</small>
+                                        </div>
                                     </div>
-                                    <div class="col-3">
-                                        <small>{{ notification.time|date("H:i") }}</small>
-                                    </div>
-                                </div>
 
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
+
                         {% else %}
                             <span class="text-muted text-center">No notifications</span>
                         {% endif %}
@@ -66,5 +69,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="/js/angular/user-operations/notifications/view/notification-view-handler.js" defer></script>
+    <script src="/js/angular/user-operations/notifications/services/notificationHandler.js" defer></script>
     <script src="/js/angular/user-operations/user-operations-ctrl.js" defer></script>
 {% endblock %}
