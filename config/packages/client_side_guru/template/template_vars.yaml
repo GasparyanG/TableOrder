@@ -13,3 +13,7 @@ navBar:
 rating:
   review: 'review'
   restaurantRating: 'restaurantRating'
+
+
+notification:
+  notificationData: 'notificationData'
