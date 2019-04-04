@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Notification;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -47,4 +48,17 @@ class NotificationRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getAmountOfNotifications(User $user): int
+    {
+        $qb = $this->createQueryBuilder("n");
+
+        $amountOfNotifications = $qb->select("count(n.id) as amountOfNotifications")
+            ->where("n.user = :user")
+            ->setParameter("user", $user)
+            ->getQuery()
+            ->getResult();
+
+        return $amountOfNotifications[0]["amountOfNotifications"];
+    }
 }
