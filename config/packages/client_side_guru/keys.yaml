@@ -12,3 +12,7 @@ reservation:
 table:
   personAmount: 'personAmount'
   tableId: 'tableId'
+
+auth:
+  password: 'password'
+  username: 'username'
