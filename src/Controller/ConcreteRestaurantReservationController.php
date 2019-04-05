@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\BaseLayout\ClientDataComposerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,9 +14,12 @@ use Psr\Log\LoggerInterface;
 
 class ConcreteRestaurantReservationController extends AbstractController
 {
-    public function search(RestaurantSearchFlow $flow, SearchFormInterface $formHelper, LoggerInterface $logger)
+    public function search(RestaurantSearchFlow $flow,
+                           SearchFormInterface $formHelper,
+                           LoggerInterface $logger,
+                           ClientDataComposerInterface $clientDataComposer)
     {
-        $arrayOfData = $this->getClientSideData($formHelper);
+        $arrayOfData = $clientDataComposer->composeData();
         $arrayOfData["notReservedTables"] = $flow->getNotReservedTables();
 
         $request = Request::createFromGlobals();
@@ -23,13 +27,5 @@ class ConcreteRestaurantReservationController extends AbstractController
         $arrayOfData["queryParams"] = $request->query->all();
 
         return $this->render('concrete_restaurant_reservation/index.html.twig', $arrayOfData);
-    }
-
-    public function getClientSideData($formHelper)
-    {
-        $arrayOfData["cities"] = $formHelper->getLocationsForChoiceType();
-        $arrayOfData["arrayOfPersonAmounts"] = $formHelper->getPersonAmountArray();
-
-        return $arrayOfData;
     }
 }

@@ -13,7 +13,11 @@
                     <div class="card">
                         <img class="card-img-top" src={{ "/photo/restaurant/cover-photo/" ~ bookmark.bookmark.restaurant.coverPhoto }} alt="">
                         <div class="card-body">
-                            <h5 class="card-title"> {{ bookmark.bookmark.restaurant.name }} </h5>
+
+                            <a href={{ "/restaurants/" ~ bookmark.bookmark.restaurant.name ~ "/" ~ bookmark.bookmark.restaurant.id }}>
+                                <h5 class="card-title"> {{ bookmark.bookmark.restaurant.name }} </h5>
+                            </a>
+
                             <span><i class="fas fa-map-marker-alt"></i> {{ bookmark.bookmark.restaurant.location }} <i class="fas fa-star"></i> {{ bookmark.restaurant.rating}}</span>
                         </div>
 

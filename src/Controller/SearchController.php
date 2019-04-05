@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\User\Data\Composed\UserDataComposerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,17 +20,17 @@ class SearchController extends AbstractController
                               LoggerInterface $logger,
                               DefaultErrorMessageFetcherInterface $defaultMsgFetcher,
                               UserDataComposerInterface $userDataComposer,
+                              ClientDataComposerInterface $clientDataComposer,
                               SearchFormInterface $formHelper)
     {
         $queryParams = $request->query->all();
 
+        $dataToReturnToClient = $clientDataComposer->composeData();
+
         // client required data: defaults
-        $dataToReturnToClient = [];
         $dataToReturnToClient["queryParams"] = $queryParams;
         $dataToReturnToClient["error"] = false;
         $dataToReturnToClient["notReservedTables"] = false;
-        $dataToReturnToClient["cities"] = $formHelper->getLocationsForChoiceType();
-        $dataToReturnToClient["arrayOfPersonAmounts"] = $formHelper->getPersonAmountArray();
 
         // add user
         $dataToReturnToClient["user"] = $userDataComposer->composeData();

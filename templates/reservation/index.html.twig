@@ -68,7 +68,9 @@
                             <ul class="list-group list-group-flush">
                             {% if previousReservation %}
                                 <li class="list-group-item">
-                                    <div><i class="fas fa-calendar-times"></i> {{ previousReservation.reservationDate.format("Y-m-d") }} {{ previousReservation.reservationTime.format("H:i:s") }} </div>
+                                    <div><i class="fas fa-calendar-times"></i>
+                                        <span class="text-muted">Previous Reservation: </span>{{ previousReservation.reservationDate.format("Y-m-d") }} {{ previousReservation.reservationTime.format("H:i:s") }}
+                                    </div>
                                 </li>
                             {% else %}
                                 <li class="list-group-item">
@@ -77,7 +79,9 @@
                             {% endif %}
                             {% if nextReservation %}
                                 <li class="list-group-item">
-                                    <div><i class="fas fa-calendar-times"></i> {{ nextReservation.reservationDate.format("Y-m-d") }} {{ nextReservation.reservationTime.format("H:i:s") }} </div>
+                                    <div><i class="fas fa-calendar-times"></i>
+                                        <span class="text-muted">Next Reservation: {{ nextReservation.reservationDate.format("Y-m-d") }} {{ nextReservation.reservationTime.format("H:i:s") }}</span>
+                                    </div>
                                 </li>
                             {% else %}
                                 <li class="list-group-item">

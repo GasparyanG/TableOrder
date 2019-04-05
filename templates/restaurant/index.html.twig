@@ -16,8 +16,8 @@
 
     <ol class="breadcrumb">
         {# 1 #}
-        <li class="breadcrumb-item"><a href="#">restaurants</a></li>
-        <li class="breadcrumb-item"><a href="#">{{ restaurant.name }}</a></li>
+        <li class="breadcrumb-item"><a href={{ "/restaurants" }}>restaurants</a></li>
+        <li class="breadcrumb-item"><a href={{ "/restaurants/" ~ restaurant.name }}>{{ restaurant.name }}</a></li>
         <li class="breadcrumb-item active">{{ restaurant.id }}</li>
     </ol>
     <div class="mb-3">
@@ -36,7 +36,7 @@
                 {% if review %}
                     <span>Review: <span class="text-warning"><i class="far fa-star"></i></span>{{ review }}</span>
                 {% else %}
-                    <span>Review: <span class="text-warning"><i class="far fa-star"></i></span>No Review Yet</span>
+                    <span>Review: <span class=""><i class="far fa-star"></i></span>No Review Yet</span>
                 {% endif %}
                 {# amuont of people #}
                 <span><i class="far fa-comment-alt"></i> {{ amountOfReview }}</span>
@@ -44,7 +44,12 @@
             <hr>
             {# about restaurant #}
             <div class="p-2">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, quae similique? Aspernatur, commodi dolore doloremque, esse eum exercitationem fuga fugiat impedit molestias nesciunt perspiciatis quis quisquam sunt tempora voluptates, voluptatum.
+                {% if restaurant.slogan %}
+                    <div class="text-muted text-center">
+                        <h5>{{ restaurant.slogan }}</h5>
+                    </div>
+                {% endif %}
+
             </div>
             <h4 class="text-center mt-4">{{ amountOfReview }} people ratings</h4>
             <hr>
@@ -53,9 +58,6 @@
                 <div class="col-md-6">
                     <h5>Overall ratings and reviews</h5>
                     Reviews can only be made by diners who have eaten at this restaurant
-                    <div class="mt-2">
-                        <span>Review: <span class="text-warning"><i class="far fa-star"></i></span> {{ review }}</span>
-                    </div>
                 </div>
                 <div class="col-md-6">
                     {% if amountOfReview > 0 %}
@@ -86,8 +88,8 @@
                     {# interaction #}
                     {% include "restaurant/sections/review/interaction.html.twig" %}
                 {% else %}
-                    <h4 class="text-center">My Review</h4>
-                    <h5>To make review you need to visit this restaurant first</h5>
+                    <h4 class="text-center">Your Review</h4>
+                    <h5 class="text-center">To make review you need to visit this restaurant first</h5>
                     {# to make review you need to visit this restaurant #}
                 {% endif %}
 
@@ -130,13 +132,16 @@
                                 <input type="time" name="reservationTime" class="form-control" ng-model="reservationTime">
                                 <input type="date" name="reservationDate" class="form-control" ng-model="reservationDate">
                             </div>
-                            <div class="input-group mt-2">
+
+                            <div class="mt-3">
+                                <label for="" class="text-muted"><i class="fas fa-user-friends"></i> Person amount</label>
                                 <select name="personAmount" id="" class="form-control" ng-model="personAmount">
                                     {% for personAmount in arrayOfPersonAmounts %}
                                         <option value={{personAmount}}>{{personAmount}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
+
                         </div>
                         <button class="btn btn-primary" ng-click="findATable()">Find table</button>
                     {#</form>#}

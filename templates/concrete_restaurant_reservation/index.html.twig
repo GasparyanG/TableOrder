@@ -3,7 +3,7 @@
 {# title need to be dynamic #}
 {% block title %}
     {% if notReservedTables %}
-        {% set restaurant = notReservedTables[0].getRestaurant() %}
+        {% set restaurant = notReservedTables.tables[0].getRestaurant() %}
         {% set restaurantName = restaurant.name %}
         {{ restaurantName }}
     {% else %}
@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block body %}
-    {% set restaurant = notReservedTables[0].getRestaurant() %}
+    {% set restaurant = notReservedTables.tables[0].getRestaurant() %}
     {% set restaurantName = restaurant.name %}
     {% set restaurantLocation = restaurant.location %}
     {% if notReservedTables %}
@@ -21,7 +21,7 @@
         </div>
 
         <div class = "row">
-            {% for table in notReservedTables %}
+            {% for table in notReservedTables.tables %}
                 <div class="card col-md-4 mb-1 mt-1">
                     <h5 class="card-header text-center">
                         Ready to be reserved

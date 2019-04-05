@@ -1,10 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{#
-    - [x] make this data dynamic (1)
-    - [] make this form apropriate for angualr ajax call, also add required hidden fields (2)
-#}
-
 {% block title %}{{ restaurantNamePlaceholder }}{% endblock %}
 
 {% block body %}
@@ -33,17 +28,26 @@
         <div class="row mt-4">
             <div class="col-md-8">
                 <div>
-                    <h1 class="text-center">{{ restaurantName }}</h1>
+                    <h1 class="">{{ restaurantName }}</h1>
+
+
                     <hr>
                     <div class="text-center">
                         <span><i class="far fa-star"></i> {{ restaurantRating }}</span>
                         <span><i class="far fa-comment-alt"></i> {{ amountOfReview }}</span>
                     </div>
-                    <h4 class="text-center mt-4">Raiting details</h4>
+
+                     {#slogan section#}
+                    {% if restaurant.slogan %}
+                        <h4 class="text-muted text-center">{{ restaurant.slogan }}</h4>
+                    {% endif %}
+
+                    <h4 class="text-center mt-4">Rating details</h4>
                     <hr>
                     <div class="row">
                         <div class="col-md-6">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda commodi consectetur consequatur consequuntur culpa, cupiditate enim error maiores maxime, minus molestiae non perferendis, qui reiciendis saepe sed sequi soluta voluptas.
+                            <h5>Overall ratings and reviews</h5>
+                            Reviews can only be made by diners who have eaten at this restaurant
                         </div>
                         <div class="col-md-6">
                             {% if amountOfReview > 0 %}
@@ -74,7 +78,7 @@
                 <div class="row">
                     {% for branch in restaurantBranches %}
                         <a class="card col-md-5 mr-4 mb-4" href={{ "/restaurants/" ~ restaurantName ~ "/" ~ branch.restaurant.id }}>
-                            <img src={{ restaurantImg }} class="card-img-top" alt="">
+                            <img class="card-img-top" src={{ restaurantImg }} alt="">
                             <div class="card-body">
                                 <span class=""><i class="fas fa-map-marker-alt"></i> {{ branch.restaurant.location }}</span>
                                 <span class=""><i class="far fa-star"></i> {{ branch.rating }}</span>
@@ -104,8 +108,6 @@
 
 
                             <div class="form-group">
-
-                                {# 2 #}
                                 <div class="input-group">
                                     <input ng-init={{ "restaurantName='" ~ restaurantName ~ "'" }} type="hidden" name="restaurantName" value={{ restaurantName }}>
                                     <input ng-init={{ "behavior='restaurantGroup'" }} type="hidden" name="behavior" value="restaurantGroup">
@@ -114,12 +116,18 @@
                                     <input type="time" name="reservationTime" class="form-control" ng-model="reservationTime" ng-model="reservationTime">
                                     <input type="date" name="reservationDate" class="form-control" ng-model="reservationDate" ng-model="reservationDate">
                                 </div>
-                                <div class="input-group mt-2">
+
+                                <div class="mt-3">
+                                    <label for="" class="text-muted"><i class="fas fa-user-friends"></i> Person Amount</label>
                                     <select name="personAmount" id="" class="form-control" ng-model="personAmount">
                                         {% for personAmount in arrayOfPersonAmounts %}
                                             <option value={{personAmount}}>{{personAmount}}</option>
                                         {% endfor %}
                                     </select>
+                                </div>
+
+                                <div class="mt-3">
+                                    <label for="" class="text-muted"><i class="fas fa-map-marker-alt"></i> Location</label>
                                     <select name="location" id="location" class="form-control" ng-model="location">
                                         {% for cityName, city in cities %}
                                             <optgroup label = {{cityName}}>
@@ -130,8 +138,10 @@
                                         {% endfor %}
                                     </select>
                                 </div>
+
                             </div>
-                            <button class="btn btn-primary" ng-click="findTableGroup()">Find Table</button>
+                        <button class="btn btn-primary" ng-click="findTableGroup()">Find Table</button>
+                    </div>
                     </div>
                 </div>
             </div>

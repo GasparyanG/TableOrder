@@ -8,15 +8,18 @@
         {% for review in reviews %}
             <div class="row">
                 <div class="col-6 mb-3">
-                    <a href={{ "/restaurants/" ~ review.review.restaurant.name ~ "/" ~ review.review.restaurant.id }}>
+
                         <div class="card" style="width: 18rem">
                             <img src={{ "photo/restaurant/cover-photo/" ~ review.review.restaurant.coverPhoto }} class="card-img-top" alt="restaurant-img">
                             <div class="card-body">
-                                <h5 class="card-title"> {{ review.review.restaurant.name }} </h5>
+                                <a href={{ "/restaurants/" ~ review.review.restaurant.name ~ "/" ~ review.review.restaurant.id }}>
+                                    <h5 class="card-title"> {{ review.review.restaurant.name }} </h5>
+                                </a>
+
                                 <span><i class="fas fa-map-marker-alt"></i> {{ review.review.restaurant.location }} <i class="fas fa-star"></i> {{ review.restaurantRating }}</span>
                             </div>
                         </div>
-                    </a>
+
                 </div>
 
                 {% set userRating = review.review.review %}
