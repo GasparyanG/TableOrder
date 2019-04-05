@@ -102,3 +102,13 @@ App\Entity\Reservation:
     amountOfTime:
       - NotBlank: {message: "amount of time should not be blank"}
       - Type: {type: int, message: "Amount of time should be an integer"}
+
+
+#LOGIN
+App\Service\Security\Validation\Objects\Login:
+  properties:
+    email:
+      - NotBlank: {message: "email should not be blank"}
+
+    password:
+      - NotBlank: {message: "password should not be blank"}
