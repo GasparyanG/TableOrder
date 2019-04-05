@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\Bookmark\BookmarkMaintaining\BookmarkStateMaintainerInterface;
 use App\Service\Restaurant\RestaurantSupplierInterface;
 use App\Service\User\Data\Composed\UserDataComposerInterface;
@@ -19,6 +20,10 @@ use Psr\Log\LoggerInterface;
 
 class RestaurantController extends AbstractController
 {
+    private $em;
+    private $restaurantRepo;
+    private $existenceHandler;
+
     public function __construct(RegistryInterface $registry, ExistenceHandlerInterface $existenceHandler)
     {
         $this->em = $registry->getManager();
@@ -33,47 +38,45 @@ class RestaurantController extends AbstractController
                             BookmarkStateMaintainerInterface $bookmarkStateMaintainer,
                             RestaurantSupplierInterface $restaurantSupplier,
                             UserDataComposerInterface $userDataComposer,
+                            ClientDataComposerInterface $clientDataComposer,
                             LoggerInterface $logger)
     {
+        // get base layout data
+        $baseLayoutData = $clientDataComposer->composeData();
+
+        // add bookmark state
         $bookmarkState = $bookmarkStateMaintainer->checkBookmarkState($restaurantId);
+        $baseLayoutData["bookmarked"] = $bookmarkState;
 
-        // user data
+        // add user data
         $userData = $userDataComposer->composeData();
+        $baseLayoutData["user"] = $userData;
 
-        // rated
+        // add rated state
         $rated = $restaurantSupplier->ratedByUser($restaurantId);
+
 
         $rating = false;
         if ($rated) {
-            $rating = $restaurantSupplier->getUserRating($restaurantId);
+            $baseLayoutData["rating"] = $restaurantSupplier->getUserRating($restaurantId);
         }
 
-        // visited
+        // add visiting state
         $visited = $restaurantSupplier->visitedByUser($restaurantId);
+        $baseLayoutData["visited"] = $visited;
 
         // restaurant
         if (!$this->existenceHandler->restaurantExists($restaurantName, $restaurantId)) {
-            
+            throw new \RuntimeException("restaurant does not exists");
         }
 
-        $restaurant = $this->restaurantRepo->findOneBy(["id" => $restaurantId, "name" => $restaurantName]);
+        $baseLayoutData["restaurant"] = $this->restaurantRepo->findOneBy(["id" => $restaurantId, "name" => $restaurantName]);
 
-        $review = $reviewSupplier->getReviewForRestaurant(null, $restaurantId);
-        $amountOfReview = $reviewSupplier->getAmountOfReviewers(null, $restaurantId);
-        $detailedReview = $reviewSupplier->getRestaurantDetailedReview(null, $restaurantId);
+        $baseLayoutData["review"] = $reviewSupplier->getReviewForRestaurant(null, $restaurantId);
+        $baseLayoutData["amountOfReview"] = $reviewSupplier->getAmountOfReviewers(null, $restaurantId);
+        $baseLayoutData["detailedReview"] = $reviewSupplier->getRestaurantDetailedReview(null, $restaurantId);
 
         // search area data
-        return $this->render('restaurant/index.html.twig', [
-            "restaurant" => $restaurant,
-            "review" => $review,
-            "detailedReview" => $detailedReview,
-            "amountOfReview" => $amountOfReview,
-            "cities" => $formHelper->getLocationsForChoiceType(),
-            "arrayOfPersonAmounts" => $formHelper->getPersonAmountArray(),
-            "bookmarked" => $bookmarkState,
-            "visited" => $visited,
-            "rating" => $rating,
-            "user" => $userData
-        ]);
+        return $this->render('restaurant/index.html.twig', $baseLayoutData);
     }
 }

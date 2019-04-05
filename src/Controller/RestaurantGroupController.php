@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\User\Data\Composed\UserDataComposerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Service\BaseLayout\BaseLayoutSupplierInterface;
 use App\Service\Restaurant\RestaurantGroupSupplier\RestaurantGroupSupplierInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,12 +19,13 @@ use Psr\Log\LoggerInterface;
 class RestaurantGroupController extends AbstractController
 {
     public function getPage($restaurantName,
-                            BaseLayoutSupplierInterface $baseLayoutSupplier,
+                            ClientDataComposerInterface $clientDataComposer,
                             RestaurantGroupSupplierInterface $restaurantGroupSupplier,
                             UserDataComposerInterface $userDataComposer,
                             LoggerInterface $logger)
     {
-        $dataForClient = $this->getDataForClient($baseLayoutSupplier);
+        $dataForClient = $clientDataComposer->composeData();
+
         $dataForClient["restaurantNamePlaceholder"] = $restaurantName;
         $dataForClient["amountOfReview"] = $restaurantGroupSupplier->getReviewAmount($restaurantName);
         $dataForClient["detailedReview"] = $restaurantGroupSupplier->getDetailedReview($restaurantName);
@@ -35,16 +36,6 @@ class RestaurantGroupController extends AbstractController
         $dataForClient["user"] = $userDataComposer->composeData();
 
         return $this->render('restaurant_group/index.html.twig', $dataForClient);
-    }
-
-    private function getDataForClient($baseLayoutSupplier): array
-    {
-        $dataForClient = [];
-
-        $dataForClient["cities"] = $baseLayoutSupplier->getLocation();
-        $dataForClient["arrayOfPersonAmounts"] = $baseLayoutSupplier->getPersonAmount();
-
-        return $dataForClient;
     }
 
     public function ajaxSearch(SearchFlowInterface $flow, LoggerInterface $logger)
@@ -75,11 +66,11 @@ class RestaurantGroupController extends AbstractController
     }
 
     public function search(SearchFlowInterface $flow,
-                           BaseLayoutSupplierInterface $baseLayoutSupplier,
+                           ClientDataComposerInterface $clientDataComposer,
                            UserDataComposerInterface $userDataComposer,
                            Request $request)
     {
-        $dataForClient = $this->getDataForClient($baseLayoutSupplier);
+        $dataForClient = $clientDataComposer->composeData();
         $notReservedTables = $flow->getNotReservedTables();
 
         $dataForClient["notReservedTables"] = $notReservedTables;
