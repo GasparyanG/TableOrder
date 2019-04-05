@@ -16,9 +16,9 @@ security:
             security: false
         main:
             anonymous: true
-            guard:
-                authenticators:
-                    - App\Security\LogInFormAuthenticator
+            #guard:
+            #   authenticators:
+                    #- App\Security\LogInFormAuthenticator
 
             # activate different ways to authenticate
 
