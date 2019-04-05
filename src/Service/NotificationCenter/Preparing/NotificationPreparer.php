@@ -42,6 +42,13 @@ class NotificationPreparer implements NotificationPreparingInterface
 
     public function getNotifications(): ?array
     {
+        $user = $this->userSupporter->getUser();
+
+        // in case if user is unauthenticated
+        if (!$user) {
+            return null;
+        }
+
         $this->addNotifications();
         $this->addNotificationsAmount();
 
