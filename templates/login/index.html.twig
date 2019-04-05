@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+    <div>
+        <h1 class="text-center">Login</h1>
+
+        {% if  errors %}
+            <div class="mt-4">
+                {% for error in errors %}
+                    <div class="alert alert-danger mt-1 text-center">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="mt-4">
+            <form action="" method="POST">
+                <label for="username">Email</label>
+                <input id="email" type="input" class="form-control" name="username" placeholder="email@address.tld" >
+
+                <label for="password">Password</label>
+                <input id="password" type="password" class="form-control" name="password" placeholder="password" >
+
+                <button class="btn btn-primary mt-4">Login</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
