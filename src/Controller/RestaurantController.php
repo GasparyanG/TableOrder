@@ -7,12 +7,12 @@ use App\Service\Bookmark\BookmarkMaintaining\BookmarkStateMaintainerInterface;
 use App\Service\Restaurant\RestaurantSupplierInterface;
 use App\Service\User\Data\Composed\UserDataComposerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Search\Interfaces\SearchFormInterface;
 use App\Service\Review\ReviewSupplier\ReviewSupplierInterface;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use App\Service\Existence\Entity\ExistenceHandlerInterface;
+
 // entities
 use App\Entity\Restaurant;
 
@@ -48,9 +48,9 @@ class RestaurantController extends AbstractController
         $bookmarkState = $bookmarkStateMaintainer->checkBookmarkState($restaurantId);
         $baseLayoutData["bookmarked"] = $bookmarkState;
 
-        // add user data
-        $userData = $userDataComposer->composeData();
-        $baseLayoutData["user"] = $userData;
+        // add user data: uncomment if auth user requires
+        // $userData = $userDataComposer->composeData();
+        // $baseLayoutData["user"] = $userData;
 
         // add rated state
         $rated = $restaurantSupplier->ratedByUser($restaurantId);

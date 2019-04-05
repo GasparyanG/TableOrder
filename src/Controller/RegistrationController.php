@@ -4,25 +4,31 @@ namespace App\Controller;
 
 use App\Service\BaseLayout\BaseLayoutSupplierInterface;
 # use App\Service\BaseLayout\Products\BaseLayoutSupplier;
+use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\Bridge\SignUpAuthentication\SignUpAuthenticationInterface;
 use App\Service\ClientSideGuru\Post\Authentication\SignUp\SignUpFormFetcherInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 class RegistrationController extends AbstractController
 {
-    public function getPage(BaseLayoutSupplierInterface $baseLayoutSupplier)
+    public function getPage(BaseLayoutSupplierInterface $baseLayoutSupplier,
+                            ClientDataComposerInterface $clientDataComposer)
     {
-        $arrayOfData = $this->getBaseLayoutComponents($baseLayoutSupplier);
+        $arrayOfData = $clientDataComposer->composeData();
+        $arrayOfData["errors"] = [];
 
         return $this->render("registration/register.html.twig", $arrayOfData);
     }
 
-    public function signUp(Request $request, LoggerInterface $logger, SignUpAuthenticationInterface $signUpAuthentication, BaseLayoutSupplierInterface $baseLayoutSupplier, SignUpFormFetcherInterface $signUpFormFetcher)
+    public function signUp(Request $request, LoggerInterface $logger,
+                           SignUpAuthenticationInterface $signUpAuthentication,
+                           ClientDataComposerInterface $clientDataComposer,
+                           SignUpFormFetcherInterface $signUpFormFetcher)
     {
-        $arrayOfData = $this->getBaseLayoutComponents($baseLayoutSupplier);
+        $arrayOfData = $clientDataComposer->composeData();
+        $arrayOfData["errors"] = [];
 
         $userCredentials = $request->request->all();
 
@@ -53,16 +59,5 @@ class RegistrationController extends AbstractController
         $arrayOfData["errors"] = $errors;
 
         return $this->render("registration/register.html.twig", $arrayOfData);
-    }
-
-    private function getBaseLayoutComponents($baseLayoutSupplier): array
-    {
-        $arrayOfData = [];
-
-        $arrayOfData["cities"] = $baseLayoutSupplier->getLocation();
-        $arrayOfData["arrayOfPersonAmounts"] = $baseLayoutSupplier->getPersonAmount();
-        $arrayOfData["errors"] = [];
-
-        return $arrayOfData;
     }
 }

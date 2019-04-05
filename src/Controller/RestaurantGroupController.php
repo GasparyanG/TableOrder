@@ -33,7 +33,7 @@ class RestaurantGroupController extends AbstractController
         // restaurant's data
         $dataForClient["restaurantBranches"] = $restaurantGroupSupplier->getRestaurantBranches($restaurantName);
 
-        $dataForClient["user"] = $userDataComposer->composeData();
+        // $dataForClient["user"] = $userDataComposer->composeData();
 
         return $this->render('restaurant_group/index.html.twig', $dataForClient);
     }
