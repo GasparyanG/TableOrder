@@ -1,8 +1,17 @@
 # AUTHENTICATION
+#LOGIN
 login:
   path: /authentication/login
-  controller: App\Controller\SecurityController::login
+  controller: App\Controller\LoginController::getPage
+  methods: [GET]
 
+login_post:
+  path: /authentication/login
+  controller: App\Controller\LoginController::login
+  methods: [POST]
+
+
+#SIGN UP
 sign_up:
   path: /authentication/sign-up
   controller: App\Controller\RegistrationController::getPage
