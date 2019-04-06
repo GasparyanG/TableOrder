@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Restaurants{% endblock %}
+
+{% block body %}
+    <div class="mb-4 row">
+        <h3 class="text-muted col-3">Filters</h3>
+        <h3 class="text-center col-9">Restaurants in TableOrder</h3>
+    </div>
+
+
+    <div class="row">
+        <div id="filters" class="col-3">
+            <div>
+                <i class="fas fa-star"></i> <a href="/restaurants?filter=most-rated&offset=0">Most rated</a>
+            </div>
+
+            <div>
+                <i class="far fa-calendar"></i> <a href="/restaurants?filter=resent-added&offset=0">Resent added</a>
+            </div>
+
+        </div>
+        <div class="row col-9">
+            {% for restaurant in restaurants %}
+                <div class="card col-5 ml-2 mb-2">
+                    <img class="card-img-top" src={{ "/photo/restaurant/cover-photo/" ~ restaurant.restaurant.coverPhoto }} alt="">
+                    <div class="card-body">
+                        <a href={{ "/restaurants/" ~ restaurant.restaurant.name }}><h3 class="card-title">{{ restaurant.restaurant.name }}</h3></a>
+                        <p class="card-text">
+                            {% if restaurant.rating > 0 %}
+                                <i class="fas fa-star"></i> {{ restaurant.rating }}
+                            {% else %}
+                                <i class="fas fa-star"></i> <span class="text-muted">not rated yet</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/restaurants/filters.css">
+{% endblock %}
