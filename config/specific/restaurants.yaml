@@ -1,0 +1,12 @@
+filter:
+  filter: 'filter'
+  offset: 'offset'
+  values:
+    resentAdded: 'resent-added'
+    mostRated: 'most-rated'
+
+
+defaults:
+  filter: 'resent-added'
+  offset: 0
+  limit: 30
