@@ -4,6 +4,7 @@ namespace App\Service\Review\ReviewMaker\Products;
 
 use App\Service\ConfigurationFetcher\Keys\KeysFetcherInterface;
 use App\Service\ExternalSource\ExternalSourceSupplierInterface;
+use App\Service\Restaurant\RestaurantSupplierInterface;
 use App\Service\Review\ReviewMaker\ReviewMakerInterface;
 use App\Service\User\UserSupporterInterface;
 
@@ -14,6 +15,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 // entities
 use App\Entity\Review;
 use App\Entity\Restaurant;
+use App\Entity\RestaurantDetails;
 
 // DEV
 use Psr\Log\LoggerInterface;
@@ -24,10 +26,12 @@ class ReviewMaker implements ReviewMakerInterface
     private $keysFetcher;
     private $userSupporter;
     private $validator;
+    private $restaurantSupplier;
 
     // db
     private $em;
     private $restaurantRepo;
+    private $restaurantDetRepo;
 
     // DEV
     private $logger;
@@ -37,14 +41,17 @@ class ReviewMaker implements ReviewMakerInterface
                                 RegistryInterface $doctrine,
                                 ExternalSourceSupplierInterface $externalSourceSupplier,
                                 KeysFetcherInterface $keysFetcher,
+                                RestaurantSupplierInterface $restaurantSupplier,
                                 LoggerInterface $logger)
     {
         $this->externalSourceSupplier = $externalSourceSupplier;
         $this->keysFetcher = $keysFetcher;
+        $this->restaurantSupplier = $restaurantSupplier;
 
         // repo config
         $this->em = $doctrine->getManager();
         $this->restaurantRepo = $this->em->getRepository(Restaurant::class);
+        $this->restaurantDetRepo = $this->em->getRepository(RestaurantDetails::class);
 
         $this->userSupporter = $userSupporter;
         $this->validator = $validator;
@@ -103,6 +110,21 @@ class ReviewMaker implements ReviewMakerInterface
         $this->em->persist($review);
         $this->em->flush();
 
+        // set overall rating in restaurant details table;
+        $this->updateRestaurantRating($restaurant);
+
         return true;
+    }
+
+    private function updateRestaurantRating(Restaurant $restaurant): void
+    {
+        $name = $restaurant->getName();
+        $restaurantGroupRating = $this->restaurantSupplier->getRestaurantGroupReview($name);
+
+        $restaurantDet = $this->restaurantDetRepo->findOneBy(["name" => $name]);
+        $restaurantDet->setRating($restaurantGroupRating);
+
+        $this->em->persist($restaurantDet);
+        $this->em->flush();
     }
 }
