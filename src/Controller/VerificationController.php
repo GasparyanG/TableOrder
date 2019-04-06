@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\BaseLayout\BaseLayoutSupplierInterface;
+use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\Bridge\Verification\VerificationComponentsSupplierInterface;
 use App\Service\ClientSideGuru\Post\Authentication\SignUp\SignUpFormFetcherInterface;
 use App\Service\ClientSideGuru\Post\Authentication\Verification\VerificationFetcherInterface;
@@ -17,20 +18,24 @@ use Psr\Log\LoggerInterface;
 
 class VerificationController extends AbstractController
 {
-    public function getPage(BaseLayoutSupplierInterface $baseLayoutSupplier)
+    public function getPage(ClientDataComposerInterface $clientDataComposer)
     {
-        $arrayOfData = $this->getBaseLayoutComponents($baseLayoutSupplier);
+        $arrayOfData = $clientDataComposer->composeData();
+        $arrayOfData["tryAgain"] = false;
+        $arrayOfData["errors"] = [];
 
         return $this->render('verification/index.html.twig', $arrayOfData);
     }
 
-    public function verify(BaseLayoutSupplierInterface $baseLayoutSupplier,
+    public function verify(ClientDataComposerInterface $clientDataComposer,
                            VerificationComponentsSupplierInterface $verificationComponentsSupplier,
                            Request $request,
                            LoggerInterface $logger,
                            SignUpFormFetcherInterface $signUpFormFetcher, VerificationFetcherInterface $verificationFetcher)
     {
-        $arrayOfData = $this->getBaseLayoutComponents($baseLayoutSupplier);
+        $arrayOfData = $clientDataComposer->composeData();
+        $arrayOfData["tryAgain"] = false;
+        $arrayOfData["errors"] = [];
 
         // validate request's required data
         $errors = $verificationComponentsSupplier->validateVerification();
@@ -60,7 +65,7 @@ class VerificationController extends AbstractController
                 $verificationComponentsSupplier->setCookie($email);
 
                 // this will be changed as soon as success notification will be ready
-                return $this->redirectToRoute("success");
+                return $this->redirectToRoute("dashboard");
             }
 
             $arrayOfData["tryAgain"] = true;
@@ -70,17 +75,5 @@ class VerificationController extends AbstractController
 
             return $this->render('verification/index.html.twig', $arrayOfData);
         }
-    }
-
-    private function getBaseLayoutComponents($baseLayoutSupplier): array
-    {
-        $arrayOfData = [];
-
-        $arrayOfData["cities"] = $baseLayoutSupplier->getLocation();
-        $arrayOfData["arrayOfPersonAmounts"] = $baseLayoutSupplier->getPersonAmount();
-        $arrayOfData["tryAgain"] = false;
-        $arrayOfData["errors"] = [];
-
-        return $arrayOfData;
     }
 }
