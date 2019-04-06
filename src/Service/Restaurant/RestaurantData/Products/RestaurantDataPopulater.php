@@ -50,4 +50,27 @@ class RestaurantDataPopulater implements RestaurantDataPopulaterInterface
             $this->restaurantsWithPopulatedData[] = $restaurantArray;
         }
     }
+
+    public function populateRestaurantsWithData(array $restaurants): array
+    {
+        $this->prepaRerestaurantsWithPopulatedData($restaurants);
+        $this->addRestaurantGroupRatings();
+
+        return $this->restaurantsWithPopulatedData;
+    }
+
+    private function addRestaurantGroupRatings(): void
+    {
+        $changesArray = [];
+
+        foreach($this->restaurantsWithPopulatedData as $restaurantArray){
+            $restaurant = $restaurantArray["restaurant"];
+            $restaurantName = $restaurant->getName();
+
+            $restaurantArray["rating"] = $this->restaurantSupplier->getRestaurantGroupReview($restaurantName);
+            $changesArray[] = $restaurantArray;
+        }
+
+        $this->restaurantsWithPopulatedData = $changesArray;
+    }
 }
