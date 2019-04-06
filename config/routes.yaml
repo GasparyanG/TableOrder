@@ -87,6 +87,13 @@ make_reservation:
   methods: [POST]
 
 
+#RSTAURANT SECTION
+# all restaurants
+restaurants:
+  path: /restaurants
+  controller: App\Controller\RestaurantsController::getPage
+
+
 # concrete restaurant portion
 restaurant:
   path: /restaurants/{restaurantName}/{restaurantId}
