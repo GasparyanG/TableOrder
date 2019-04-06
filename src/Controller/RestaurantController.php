@@ -58,8 +58,9 @@ class RestaurantController extends AbstractController
 
         $rating = false;
         if ($rated) {
-            $baseLayoutData["rating"] = $restaurantSupplier->getUserRating($restaurantId);
+            $rating = $restaurantSupplier->getUserRating($restaurantId);
         }
+        $baseLayoutData["rating"] = $rating;
 
         // add visiting state
         $visited = $restaurantSupplier->visitedByUser($restaurantId);
