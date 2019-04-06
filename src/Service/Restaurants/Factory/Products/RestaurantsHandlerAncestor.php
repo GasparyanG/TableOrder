@@ -47,7 +47,7 @@ class RestaurantsHandlerAncestor
 
     protected function prepareRestaurantDetails(array $restaurants): array
     {
-        return $this->restaurantDataPopulater->populateRestaurantWithData($restaurants);
+        return $this->restaurantDataPopulater->populateRestaurantsWithData($restaurants);
     }
 
     protected function getActualRestaurants(array $resentAddedRestaurants): array
