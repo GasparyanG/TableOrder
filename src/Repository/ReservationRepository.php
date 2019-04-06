@@ -145,4 +145,18 @@ class ReservationRepository extends ServiceEntityRepository
 
         return $amountOfReservations[0]['amountOfReservations'];
     }
+
+    public function findRestaurantPassedReservations(int $restaurantId, User $user, $currentTime, $currentDate)
+    {
+        $qb = $this->createQueryBuilder("r");
+
+        return $qb->where($qb->expr()->andX('r.user = :user',
+            'r.restauran = :restaurantId',
+            'r.reservationDate < :reservationDate'))
+            ->setParameter('user', $user)
+            ->setParameter('reservationDate', $currentDate)
+            ->setParameter('restaurantId', $restaurantId)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -64,4 +64,9 @@ class ReservationSupplier implements ReservationSupplierInterface
     {
         return $this->userReservationSupplier->getAmountOfReservations($user);
     }
+
+    public function getRestaurantPassedReservations(int $restaurantId, User $user): array
+    {
+        return $this->userReservationSupplier->getRestaurantPassedReservations($restaurantId, $user);
+    }
 }

@@ -14,4 +14,6 @@ interface UserReservationSupplierInterface
     public function getAllReservations(User $user): array;
 
     public function getAmountOfReservations(User $user): int;
+
+    public function getRestaurantPassedReservations(int $restaurantId, User $user): array;
 }

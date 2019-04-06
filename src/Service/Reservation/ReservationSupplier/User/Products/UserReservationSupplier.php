@@ -82,4 +82,12 @@ class UserReservationSupplier implements UserReservationSupplierInterface
 
         return $amountOfReservations;
     }
+
+    public function getRestaurantPassedReservations(int $restaurantId, User $user): array
+    {
+        $currentTime = $this->timeAndDateSupplier->getCurrentTime();
+        $currentDate = $this->timeAndDateSupplier->getCurrentDate();
+
+        return $this->reservationRepo->findRestaurantPassedReservations($restaurantId, $user, $currentTime, $currentDate);
+    }
 }

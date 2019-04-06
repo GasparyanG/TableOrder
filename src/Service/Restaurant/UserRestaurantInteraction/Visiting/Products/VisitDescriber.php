@@ -44,7 +44,7 @@ class VisitDescriber implements VisitDescriberInterface
         // to be considered as visitor below mentioned need to be true
 
         // user has reservation before now
-        if ($this->reservationSupplier->getPassedReservations($user)) {
+        if ($this->reservationSupplier->getRestaurantPassedReservations($restaurantId, $user)) {
             $boolToReturn = true;
         }
 
