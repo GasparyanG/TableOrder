@@ -3,6 +3,7 @@ verification:
 
 navBar:
   search:
+    searchState: 'searchState'
     personAmount: 'arrayOfPersonAmounts'
     cities: 'cities'
 

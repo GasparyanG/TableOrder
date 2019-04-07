@@ -55,4 +55,9 @@ class TemplatingConfigFetcher implements TemplatingConfigFetcherInterface
     {
         return $this->templateVarsConfig["notification"]['notificationData'];
     }
+
+    public function getSearchState(): string
+    {
+        return $this->templateVarsConfig["navBar"]["search"]['searchState'];
+    }
 }

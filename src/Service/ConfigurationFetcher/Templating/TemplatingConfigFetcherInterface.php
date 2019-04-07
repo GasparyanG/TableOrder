@@ -19,4 +19,6 @@ interface TemplatingConfigFetcherInterface
     public function getRestaurantRating(): string;
 
     public function getNotificationData(): string;
+
+    public function getSearchState(): string;
 }
