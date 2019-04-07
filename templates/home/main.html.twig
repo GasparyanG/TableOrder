@@ -1,5 +1,22 @@
 {% extends 'base.html.twig' %}
 {# add person amount, location #}
-{% block body %}
 
+{% block title %} Home {% endblock %}
+
+{% block homePage %}
+    <div id="img">
+        <img src="https://images.pexels.com/photos/6267/menu-restaurant-vintage-table.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="">
+    </div>
+
+    <div id="representation-content">
+        <div class="text-center text-light">
+            <h1>Find your table for any occasion</h1>
+        </div>
+
+        {% include "base-sections/individual-components/main-searcher.html.twig" %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/home/repr.css">
 {% endblock %}

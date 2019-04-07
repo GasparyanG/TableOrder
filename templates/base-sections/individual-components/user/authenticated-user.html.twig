@@ -1,6 +1,6 @@
 <div id="user-operations" class="mr-4" ng-controller="UserOperationsCtrl">
     <div>
-        <a href="#notifications" data-toggle="modal"><i class="far fa-bell"></i>
+        <a title="your notifications" href="#notifications" data-toggle="modal"><i class="far fa-bell"></i>
 
             {% if notificationData.amountOfNotifications != 0 %}
                 <span id="notification-badge" class="badge badge-info"> {{ notificationData.amountOfNotifications }} </span>
@@ -9,7 +9,7 @@
         </a>
     </div>
     <div>
-        <a title="your bookmarks" href="/me/saves"><i class="far fa-bookmark"></i></a>
+        <a title="your bookmarks" href="/me#bookmarks"><i class="far fa-bookmark"></i></a>
     </div>
 
     <div>

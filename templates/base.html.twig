@@ -21,6 +21,11 @@
         {# 2 #}
         {% include "base-sections/search-section.html.twig" %}
     </header>
+
+    <div>
+        {% block homePage %}{% endblock %}
+    </div>
+
     <div class="container mt-5 mb-4">
         {% block body %}{% endblock %}
     </div>
