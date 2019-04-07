@@ -47,6 +47,7 @@ class ClientDataComposer implements ClientDataComposerInterface
         $this->addCities();
         $this->addUser();
         $this->addNotificationsData();
+        $this->addSearchState();
         // some methods can be abstractly defined and called here: successors of this class will override them.
 
         return $this->clientRequiredData;
@@ -79,5 +80,12 @@ class ClientDataComposer implements ClientDataComposerInterface
 
         $notificationsData = $this->notificationPreparing->getNotifications();
         $this->clientRequiredData[$notificationDataKey] = $notificationsData;
+    }
+
+    protected function addSearchState(): void
+    {
+        $searchStateKey = $this->templatingConfigFetcher->getSearchState();
+
+        $this->clientRequiredData[$searchStateKey] = true;
     }
 }
