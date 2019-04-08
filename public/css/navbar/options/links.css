@@ -1,0 +1,10 @@
+#options > a
+{
+    color: rgba(0,0,0,0.7);
+    text-decoration: none;
+}
+
+#options > a:hover
+{
+    color: rgba(0,0,0, 1);
+}
