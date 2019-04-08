@@ -34,9 +34,11 @@ class LoginController extends AbstractController
         if (!$errors) {
             if ($loginAuthentication->isValid()){
                 // renew user cookie
-                $loginAuthentication->renewCookie();
 
-                return $this->redirectToRoute("dashboard");
+
+                $redirectResponse = $this->redirectToRoute("dashboard");
+
+                return $loginAuthentication->renewCookie($redirectResponse);
             }
 
             else {

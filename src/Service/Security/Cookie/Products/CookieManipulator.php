@@ -39,11 +39,7 @@ class CookieManipulator implements CookieManipulatorInterface
     {
         $response = new Response();
 
-        $cookieName = $this->cookieFetcher->getUserCookieIdKey();
-        $expTimeAmount = $this->cookieFetcher->getExpTime();
-        $expTime = time() + $expTimeAmount;
-
-        $cookie = $this->prepareCookie($cookieName, $cookieValue, $expTime);
+        $cookie = $this->prepareCookie($cookieValue);
 
         $response->headers->setCookie($cookie);
 
@@ -51,10 +47,23 @@ class CookieManipulator implements CookieManipulatorInterface
         $response->send();
     }
 
-    private function prepareCookie($cookieName, $cookieValue, $expTime): Cookie
+    public function prepareCookie(string $cookieValue): Cookie
     {
+        $cookieName = $this->cookieFetcher->getUserCookieIdKey();
+        $expTimeAmount = $this->cookieFetcher->getExpTime();
+        $expTime = time() + $expTimeAmount;
+
         $cookie = new Cookie($cookieName, $cookieValue, $expTime);
 
         return $cookie;
+    }
+
+    public function setUserCookieAndReturnResponse(string $cookieValue, Response $responseToAddCookiesTo): Response
+    {
+        $cookie = $this->prepareCookie($cookieValue);
+
+        $responseToAddCookiesTo->headers->setCookie($cookie);
+
+        return $responseToAddCookiesTo;
     }
 }

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 // entity
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmailLoginAuthenticationStrategy implements LoginAuthenticationStrategyInterface
 {
@@ -64,7 +65,7 @@ class EmailLoginAuthenticationStrategy implements LoginAuthenticationStrategyInt
         return true;
     }
 
-    public function renewCookie(): void
+    public function renewCookie(Response $responseToAddCookiesTo): Response
     {
         $formParam = $this->request->request->all();
         $email = $formParam[$this->keysFetcher->getUsername()];
@@ -72,7 +73,12 @@ class EmailLoginAuthenticationStrategy implements LoginAuthenticationStrategyInt
 
         $userCookie = $user->getCookieId();
 
+        $cookie = $this->cookieManipulator->prepareCookie($userCookie);
+
+        $responseToAddCookiesTo->headers->setCookie($cookie);
+
+        return $responseToAddCookiesTo;
         // set cookie
-        $this->cookieManipulator->setCookie($userCookie);
+        // return $this->cookieManipulator->setCookie($userCookie);
     }
 }

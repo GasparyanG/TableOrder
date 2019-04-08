@@ -5,6 +5,7 @@ namespace App\Service\Bridge\LoginAuthentication;
 use App\Service\Security\Authentication\LoginAuthentication\LoginAuthenticationStrategyInterface;
 use App\Service\Security\Validation\ObjectHandling\LoginObjectHandlingStrategy;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmailLoginAuthenticationBridge implements LoginAuthenticationInterface
 {
@@ -30,8 +31,8 @@ class EmailLoginAuthenticationBridge implements LoginAuthenticationInterface
         return $this->loginAuthenticationStrategy->isValid();
     }
 
-    public function renewCookie(): void
+    public function renewCookie(Response $responseToAddCookiesTo): Response
     {
-        $this->loginAuthenticationStrategy->renewCookie();
+        return $this->loginAuthenticationStrategy->renewCookie($responseToAddCookiesTo);
     }
 }

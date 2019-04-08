@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Service\BaseLayout\BaseLayoutSupplierInterface;
 use App\Service\BaseLayout\ClientDataComposerInterface;
 use App\Service\Bridge\Verification\VerificationComponentsSupplierInterface;
 use App\Service\ClientSideGuru\Post\Authentication\SignUp\SignUpFormFetcherInterface;
 use App\Service\ClientSideGuru\Post\Authentication\Verification\VerificationFetcherInterface;
+use App\Service\Security\Cookie\CookieManipulatorInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 // http foundation
@@ -18,6 +21,15 @@ use Psr\Log\LoggerInterface;
 
 class VerificationController extends AbstractController
 {
+    private $em;
+    private $userRepo;
+
+    public function __construct(RegistryInterface $registry)
+    {
+        $this->em = $registry->getEntityManager();
+        $this->userRepo = $this->em->getRepository(User::class);
+    }
+
     public function getPage(ClientDataComposerInterface $clientDataComposer)
     {
         $arrayOfData = $clientDataComposer->composeData();
@@ -31,7 +43,8 @@ class VerificationController extends AbstractController
                            VerificationComponentsSupplierInterface $verificationComponentsSupplier,
                            Request $request,
                            LoggerInterface $logger,
-                           SignUpFormFetcherInterface $signUpFormFetcher, VerificationFetcherInterface $verificationFetcher)
+                           SignUpFormFetcherInterface $signUpFormFetcher, VerificationFetcherInterface $verificationFetcher,
+                           CookieManipulatorInterface $cookieManipulator)
     {
         $arrayOfData = $clientDataComposer->composeData();
         $arrayOfData["tryAgain"] = false;
@@ -61,11 +74,12 @@ class VerificationController extends AbstractController
         else {
             if ($verificationComponentsSupplier->isVerified($verification, $verificationCode)) {
 
-                // make user to be traceable: and at registration don't change cookie id, but set!
-                $verificationComponentsSupplier->setCookie($email);
+                $user = $this->userRepo->findOneBy(["email" => $email]);
+                $userCookieId = $user->getCookieId();
 
-                // this will be changed as soon as success notification will be ready
-                return $this->redirectToRoute("dashboard");
+                $redirectResponse = $this->redirectToRoute("dashboard");
+
+                return $cookieManipulator->setUserCookieAndReturnResponse($userCookieId, $redirectResponse);
             }
 
             $arrayOfData["tryAgain"] = true;
