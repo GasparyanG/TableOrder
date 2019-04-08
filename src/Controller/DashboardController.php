@@ -24,10 +24,14 @@ class DashboardController extends AbstractController
                             BookmarkSupplierInterface $bookmarkSupplier,
                             LoggerInterface $logger)
     {
-        $clientData = $clientDataComposer->composeData();
-
+        // authentication
         // get dashboard required data and add to $client data!
         $user = $userSupporter->getUser();
+        if (!$user) {
+            return $this->redirectToRoute("sign_up");
+        }
+
+        $clientData = $clientDataComposer->composeData();
 
         // RESERVATIONS
         // adding reservations
