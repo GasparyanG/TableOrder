@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\User\UserSupporterInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\Bookmark\AbstractBookmark\AbstractBookmarkHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,25 +12,35 @@ use Psr\Log\LoggerInterface;
 
 class BookmarkController extends AbstractController
 {
-    public function ajaxBookmark($restaurantId, AbstractBookmarkHandlerInterface $absBookmarkHandler, LoggerInterface $logger)
+    public function ajaxBookmark($restaurantId,
+                                 AbstractBookmarkHandlerInterface $absBookmarkHandler,
+                                 LoggerInterface $logger,
+                                 UserSupporterInterface $userSupporter)
     {
+        $bookmarkState["state"] = true;
 
-        $notAdded = false;
-        // change to integer form string
-        $restaurantId = (int) $restaurantId;
+        $user = $userSupporter->getUser();
 
-        if ($absBookmarkHandler->checkBookmarkState($restaurantId)) {
-            $notAdded = true;
-            $absBookmarkHandler->removeBookmark($restaurantId);
+        if ($user) {
+            // change to integer form string
+            $restaurantId = (int) $restaurantId;
+
+            if ($absBookmarkHandler->checkBookmarkState($restaurantId)) {
+                $bookmarkState["state"] = false;
+                $absBookmarkHandler->removeBookmark($restaurantId);
+            }
+
+            else {
+                $absBookmarkHandler->addBookmark($restaurantId);
+            }
         }
 
         else {
-            $absBookmarkHandler->addBookmark($restaurantId);
+            $bookmarkState["state"] = "redirect";
         }
 
-        $currentState = !$notAdded;
 
-        $jsonBookmarkState = json_encode($currentState);
+        $jsonBookmarkState = json_encode($bookmarkState);
 
         $response = new Response();
         $response->headers->set("Content-Type", "application/json");

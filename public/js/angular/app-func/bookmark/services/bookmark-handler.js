@@ -5,8 +5,12 @@ TableOrder.service("BookmarkHandler", ["BookmarkView","$http", function(Bookmark
             url: url
         }).then(function successCallback(response) {
             console.log(response.data);
-            if (response.data) {
+            if (response.data["state"] === true) {
                 BookmarkView.addBookmark();
+            }
+
+            else if (response.data["state"] === "redirect") {
+                window.location = "/authentication/sign-up"
             }
 
             else {
